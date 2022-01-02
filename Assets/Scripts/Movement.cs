@@ -10,18 +10,28 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashForceOnAir;
     [SerializeField] private float dashTime;
     [SerializeField] private float knockbackForce;
+    [SerializeField] private LayerMask groundMask;
 
     private new Rigidbody2D rigidbody2D;
+    private CapsuleCollider2D capsuleCollider2D;
     private bool isGrounded = false;
+    private bool isSlope = false;
     private bool isDash = false;
     private int currentJumpCount = 0;
     private int currentDashCount = 0;
     private Vector3 moveDirection;
-
+    private float angle;
+    private Vector2 perp;
 
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+    }
+
+    private void Update()
+    {
+        CheckForGround();
     }
 
     public void MoveTo(Vector3 direction)
@@ -63,22 +73,31 @@ public class Movement : MonoBehaviour
     public void Knockback(Vector3 direction)
     {
         rigidbody2D.velocity = Vector2.zero;
-        rigidbody2D.AddForce(direction * knockbackForce,  ForceMode2D.Impulse);
+        rigidbody2D.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void CheckForGround()
     {
-        if (collision.contacts[0].normal.y > 0.7f)
+        Bounds bounds = capsuleCollider2D.bounds;
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(bounds.center.x, bounds.min.y), Vector2.down, 0.1f, groundMask);
+
+        if (hit)
         {
+            perp = Vector2.Perpendicular(hit.normal).normalized;
+            angle = Vector2.Angle(hit.normal, Vector2.up);
+
+            isSlope = angle != 0 ? true : false;
+
+            if (rigidbody2D.velocity.y > 0) return;
+
             isGrounded = true;
             currentJumpCount = 0;
             currentDashCount = 0;
         }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        isGrounded = false;
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     public bool IsGrounded()

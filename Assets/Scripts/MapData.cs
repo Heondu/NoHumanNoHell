@@ -17,10 +17,12 @@ public class MapData : MonoBehaviour
         return size;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Vector2 center = (position + size) / 2;
-        Gizmos.DrawWireCube(center, size);
+        Gizmos.DrawLine(new Vector3(position.x, position.y, 0), new Vector3(size.x, position.y, 0));
+        Gizmos.DrawLine(new Vector3(size.x, position.y, 0), new Vector3(size.x, size.y, 0));
+        Gizmos.DrawLine(new Vector3(size.x, size.y, 0), new Vector3(position.x, size.y, 0));
+        Gizmos.DrawLine(new Vector3(position.x, size.y, 0), new Vector3(position.x, position.y, 0));
     }
 }

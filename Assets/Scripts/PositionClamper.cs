@@ -15,13 +15,11 @@ public class PositionClamper : MonoBehaviour
         bounds = GetComponent<CapsuleCollider2D>().bounds;
         float width = bounds.max.x - bounds.min.x;
         float height = bounds.max.y - bounds.min.y;
-        width += (mapData.GetPosition().x + mapData.GetSize().x) / 2;
-        height += (mapData.GetPosition().y + mapData.GetSize().y) / 2;
 
-        xMin = width - mapData.GetSize().x / 2;
-        xMax = mapData.GetSize().x / 2 - width;
-        yMin = height - mapData.GetSize().y / 2;
-        yMax = mapData.GetSize().y / 2 - height;
+        xMin = mapData.GetPosition().x + width;
+        xMax = mapData.GetSize().x - width;
+        yMin = mapData.GetPosition().y + height;
+        yMax = mapData.GetSize().y - height;
     }
 
     private void Update()

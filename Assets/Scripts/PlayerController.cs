@@ -5,12 +5,14 @@ public class PlayerController : MonoBehaviour, ILivingEntity
     private Movement movement;
     private PlayerAttack playerAttack;
     private Status status;
+    private new Rigidbody2D rigidbody2D;
 
     private void Start()
     {
         movement = GetComponent<Movement>();
         playerAttack = GetComponent<PlayerAttack>();
         status = GetComponent<Status>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void Update()

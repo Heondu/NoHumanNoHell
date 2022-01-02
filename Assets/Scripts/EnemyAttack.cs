@@ -7,6 +7,7 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] private int damage;
     [SerializeField] private float distance;
     [SerializeField] private float cooldown;
+    [SerializeField] private float delay;
 
     private Movement movement;
     private EnemyAnimation enemyAnimation;
@@ -25,8 +26,15 @@ public class EnemyAttack : MonoBehaviour
         if (isAttacking) return;
 
         isAttacking = true;
-
         attackDirection = direction;
+
+        StartCoroutine("AttackCo", direction);
+    }
+
+    private IEnumerator AttackCo(Vector3 direction)
+    {
+        yield return new WaitForSeconds(delay);
+
         movement.Dash(direction);
 
         enemyAnimation.Play("Attack");
@@ -43,6 +51,8 @@ public class EnemyAttack : MonoBehaviour
             }
         }
 
+        attackDirection = Vector3.zero;
+
         StartCoroutine("Cooldown", cooldown);
     }
 
@@ -51,6 +61,7 @@ public class EnemyAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         isAttacking = false;
+        enemyAnimation.Play("Idle");
     }
 
     public Vector3 GetAttackDirection()

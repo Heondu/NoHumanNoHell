@@ -26,10 +26,18 @@ public class PlayerAttack : MonoBehaviour
     private bool isMeleeInputOn;
     private bool isRangedInputOn;
 
+    private int[] comboList;
+
     private void Start()
     {
         movement = GetComponent<Movement>();
         playerAnimation = GetComponent<PlayerAnimation>();
+
+        comboList = new int[maxCombo];
+        for (int i = 0; i < comboList.Length; i++)
+        {
+            comboList[i] = 0;
+        }
     }
 
     public void MeleeAttackCheck()
@@ -65,6 +73,7 @@ public class PlayerAttack : MonoBehaviour
         movement.Dash(direction);
 
         isMeleeInputOn = false;
+        comboList[currentCombo] = 1;
         currentCombo++;
         playerAnimation.Play("Player_MeleeAttack" + currentCombo);
 
@@ -76,7 +85,7 @@ public class PlayerAttack : MonoBehaviour
             ILivingEntity entity = hit.collider.GetComponent<ILivingEntity>();
             if (entity != null)
             {
-                entity.TakeDamage(meleeDamage, gameObject);
+                entity.TakeDamage(CalcComboDamage(), gameObject);
             }
         }
 
@@ -89,11 +98,12 @@ public class PlayerAttack : MonoBehaviour
         attackDirection = direction;
 
         isRangedInputOn = false;
+        comboList[currentCombo] = 2;
         currentCombo++;
         playerAnimation.Play("Player_RangedAttack");
 
         Projectile clone = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Projectile>();
-        clone.Setup(direction, rangedDistance, rangedDamage, gameObject);
+        clone.Setup(direction, rangedDistance, CalcComboDamage(), gameObject);
 
         StartCoroutine("Cooldown", rangedCooldown);
     }
@@ -130,6 +140,34 @@ public class PlayerAttack : MonoBehaviour
         currentCombo = 0;
         attackDirection = Vector3.zero;
         playerAnimation.Play("Player_Idle");
+        for (int i = 0; i < comboList.Length; i++)
+        {
+            comboList[i] = 0;
+        }
+    }
+
+    private int CalcComboDamage()
+    {
+        if (currentCombo == 1)
+        {
+            if (comboList[0] == 1) return 10;
+            else if (comboList[0] == 2) return 5;
+        }
+        else if (currentCombo == 2)
+        {
+            if (comboList[0] == 1 && comboList[1] == 1) return 10;
+            else if (comboList[0] == 1 && comboList[1] == 2) return 15;
+            else if (comboList[0] == 2 && comboList[1] == 2) return 10;
+        }
+        else if (currentCombo == 3)
+        {
+            if (comboList[0] == 1 && comboList[1] == 1 && comboList[2] == 1) return 20;
+            else if (comboList[0] == 1 && comboList[1] == 1 && comboList[2] == 2) return 20;
+            else if (comboList[0] == 1 && comboList[1] == 2 && comboList[2] == 2) return 15;
+            else if (comboList[0] == 2 && comboList[1] == 2 && comboList[2] == 2) return 25;
+        }
+
+        return 0;
     }
 
     private void OnDrawGizmos()

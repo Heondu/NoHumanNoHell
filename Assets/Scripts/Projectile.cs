@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private Movement movement;
+    private ProjectileMover projectileMover;
     [SerializeField] private Vector2 direction;
     private float maxDistance;
     private int damage;
@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
 
     public void Setup(Vector2 direction, float maxDistance, int damage, GameObject instigator)
     {
-        movement = GetComponent<Movement>();
+        projectileMover = GetComponent<ProjectileMover>();
         this.direction = direction;
         this.maxDistance = maxDistance;
         this.damage = damage;
@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
     {
         if (instigator != null)
         {
-            movement.MoveTo(direction);
+            projectileMover.MoveTo(direction);
 
             if (!isReturn)
             {
@@ -34,6 +34,7 @@ public class Projectile : MonoBehaviour
                 if (distance >= maxDistance)
                 {
                     isReturn = true;
+                    GetComponent<CircleCollider2D>().enabled = false;
                 }
             }
             else

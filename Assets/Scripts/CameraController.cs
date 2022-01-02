@@ -12,17 +12,16 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        target = FindObjectOfType<PlayerController>().transform;
         mapData = FindObjectOfType<MapData>();
 
         float height = Camera.main.orthographicSize;
         float width = height * Screen.width / Screen.height;
-        width += (mapData.GetPosition().x + mapData.GetSize().x) / 2;
-        height += (mapData.GetPosition().y + mapData.GetSize().y) / 2;
 
-        xMin = width - mapData.GetSize().x / 2;
-        xMax = mapData.GetSize().x / 2 - width;
-        yMin = height - mapData.GetSize().y / 2;
-        yMax = mapData.GetSize().y / 2 - height;
+        xMin = mapData.GetPosition().x + width;
+        xMax = mapData.GetSize().x - width;
+        yMin = mapData.GetPosition().y + height;
+        yMax = mapData.GetSize().y - height;
     }
 
     private void LateUpdate()

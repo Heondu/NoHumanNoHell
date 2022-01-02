@@ -12,7 +12,6 @@ public class EnemyController : MonoBehaviour, ILivingEntity
 
     [SerializeField] private Vector2 detectSize;
     [SerializeField] private LayerMask detectLayerMask;
-    private bool isAttacking = false;
 
     private void Start()
     {
@@ -54,48 +53,36 @@ public class EnemyController : MonoBehaviour, ILivingEntity
     private void FSM()
     {
         Detect();
-
         if (target == null) return;
 
         float distance = Vector3.SqrMagnitude(target.position - transform.position);
 
         if (distance <= enemyAttack.GetAttackDistance())
         {
-            if (isAttacking) return;
-
-            isAttacking = true;
-            StartCoroutine("AttackCo");
+            movement.MoveTo(Vector3.zero);
+            Attack();
+        }
+        else if (distance <= detectSize.x)
+        {
+            Move();
         }
         else
         {
-            if (isAttacking)
-            {
-                isAttacking = false;
-                StopCoroutine("AttackCo");
-            }
-            Move();
+            movement.MoveTo(Vector3.zero);
         }
     }
 
     private void Detect()
     {
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, detectSize, 0, detectLayerMask);
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider.CompareTag("Player"))
-            {
-                target = collider.transform;
-                return;
-            }
-            else
-            {
-                target = null;
-            }
-        }
+        Collider2D collider = Physics2D.OverlapBox(transform.position, detectSize, 0, detectLayerMask);
+        if (collider != null) target = collider.transform;
+        else target = null;
     }
 
     private void Move()
     {
+        if (target == null) return;
+
         Vector3 direction = (target.position - transform.position).normalized;
         direction.y = 0;
         movement.MoveTo(direction);
@@ -103,16 +90,10 @@ public class EnemyController : MonoBehaviour, ILivingEntity
 
     private void Attack()
     {
+        if (target == null) return;
+
         Vector3 direction = (target.position - transform.position).normalized;
         enemyAttack.Attack(direction);
-    }
-
-    private IEnumerator AttackCo()
-    {
-        yield return new WaitForSeconds(1f);
-
-        Attack();
-        isAttacking = false;
     }
 
     private void OnDrawGizmosSelected()
