@@ -3,12 +3,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, ILivingEntity
 {
     private Movement movement;
-    private Attack attack;
+    private PlayerAttack playerAttack;
+    private Status status;
 
     private void Start()
     {
         movement = GetComponent<Movement>();
-        attack = GetComponent<Attack>();
+        playerAttack = GetComponent<PlayerAttack>();
+        status = GetComponent<Status>();
     }
 
     private void Update()
@@ -37,19 +39,16 @@ public class PlayerController : MonoBehaviour, ILivingEntity
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 direction = (Utilities.GetMouseWorldPos() - transform.position).normalized;
-            movement.Dash(direction);
-            attack.MeleeAttack(direction);
+            playerAttack.MeleeAttackCheck();
         }
         if (Input.GetMouseButtonDown(1))
         {
-            Vector3 direction = (Utilities.GetMouseWorldPos() - transform.position).normalized;
-            attack.RangedAttack(direction);
+            playerAttack.RangedAttackCheck();
         }
     }
 
-    public void TakeDamage(float damage, GameObject instigator)
+    public void TakeDamage(int damage, GameObject instigator)
     {
-
+        status.TakeDamage(damage);
     }
 }

@@ -7,12 +7,12 @@ public class Projectile : MonoBehaviour
     private Movement movement;
     [SerializeField] private Vector2 direction;
     private float maxDistance;
-    private float damage;
+    private int damage;
     private GameObject instigator;
     private bool isReturn = false;
     private Vector3 startPos;
 
-    public void Setup(Vector2 direction, float maxDistance, float damage, GameObject instigator)
+    public void Setup(Vector2 direction, float maxDistance, int damage, GameObject instigator)
     {
         movement = GetComponent<Movement>();
         this.direction = direction;
@@ -51,7 +51,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == instigator) return;
+        if (collision.CompareTag(instigator.tag)) return;
 
         ILivingEntity entity = collision.GetComponent<ILivingEntity>();
         if (entity != null)

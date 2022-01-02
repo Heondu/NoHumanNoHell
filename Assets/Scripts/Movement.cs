@@ -9,12 +9,15 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashForceOnGround;
     [SerializeField] private float dashForceOnAir;
     [SerializeField] private float dashTime;
+    [SerializeField] private float knockbackForce;
 
     private new Rigidbody2D rigidbody2D;
     private bool isGrounded = false;
     private bool isDash = false;
     private int currentJumpCount = 0;
     private int currentDashCount = 0;
+    private Vector3 moveDirection;
+
 
     private void Start()
     {
@@ -23,6 +26,7 @@ public class Movement : MonoBehaviour
 
     public void MoveTo(Vector3 direction)
     {
+        moveDirection = direction;
         transform.position += direction * moveSpeed * Time.deltaTime;
     }
 
@@ -56,6 +60,12 @@ public class Movement : MonoBehaviour
         isDash = false;
     }
 
+    public void Knockback(Vector3 direction)
+    {
+        rigidbody2D.velocity = Vector2.zero;
+        rigidbody2D.AddForce(direction * knockbackForce,  ForceMode2D.Impulse);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.contacts[0].normal.y > 0.7f)
@@ -69,5 +79,15 @@ public class Movement : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         isGrounded = false;
+    }
+
+    public bool IsGrounded()
+    {
+        return isGrounded;
+    }
+
+    public Vector3 GetMoveDirection()
+    {
+        return moveDirection;
     }
 }

@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface ILivingEntity
 {
-    void TakeDamage(float damage, GameObject instigator);
+    void TakeDamage(int damage, GameObject instigator);
 }
