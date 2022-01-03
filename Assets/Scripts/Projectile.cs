@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
     private GameObject instigator;
     private bool isReturn = false;
     private Vector3 startPos;
+    [SerializeField] private LayerMask groundMask;
 
     public void Setup(Vector2 direction, float maxDistance, int damage, GameObject instigator)
     {
@@ -47,6 +48,18 @@ public class Projectile : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.1f, groundMask);
+        if (hit)
+        {
+            isReturn = true;
+            GetComponent<CircleCollider2D>().enabled = false;
         }
     }
 

@@ -18,6 +18,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private int maxCombo;
     private int currentCombo;
 
+    [SerializeField] private LayerMask groundMask;
+
     private Movement movement;
     private Vector3 attackDirection;
     private PlayerAnimation playerAnimation;
@@ -28,10 +30,13 @@ public class PlayerAttack : MonoBehaviour
 
     private int[] comboList;
 
+    private CameraController cameraController;
+
     private void Start()
     {
         movement = GetComponent<Movement>();
         playerAnimation = GetComponent<PlayerAnimation>();
+        cameraController = Camera.main.GetComponent<CameraController>();
 
         comboList = new int[maxCombo];
         for (int i = 0; i < comboList.Length; i++)
@@ -77,6 +82,8 @@ public class PlayerAttack : MonoBehaviour
         currentCombo++;
         playerAnimation.Play("Player_MeleeAttack" + currentCombo);
 
+        AttackEffect();
+
         RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, Vector2.one, 0, direction, meleeDistance);
         foreach (RaycastHit2D hit in hits)
         {
@@ -85,6 +92,9 @@ public class PlayerAttack : MonoBehaviour
             ILivingEntity entity = hit.collider.GetComponent<ILivingEntity>();
             if (entity != null)
             {
+                RaycastHit2D hitWallCheck = Physics2D.Raycast(transform.position, hit.point - (Vector2)transform.position, meleeDistance, groundMask);
+                if (hitWallCheck) continue;
+
                 entity.TakeDamage(CalcComboDamage(), gameObject);
             }
         }
@@ -101,6 +111,8 @@ public class PlayerAttack : MonoBehaviour
         comboList[currentCombo] = 2;
         currentCombo++;
         playerAnimation.Play("Player_RangedAttack");
+
+        AttackEffect();
 
         Projectile clone = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Projectile>();
         clone.Setup(direction, rangedDistance, CalcComboDamage(), gameObject);
@@ -185,5 +197,14 @@ public class PlayerAttack : MonoBehaviour
     public Vector3 GetAttackDirection()
     {
         return attackDirection;
+    }
+
+    private void AttackEffect()
+    {
+        if (currentCombo == maxCombo)
+        {
+            cameraController.Shake(0.1f, 0.1f);
+            cameraController.Slow(0.4f, 0.2f);
+        }
     }
 }

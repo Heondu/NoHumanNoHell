@@ -114,6 +114,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &3083304229025405061
 MonoBehaviour:
   m_ObjectHideFlags: 0

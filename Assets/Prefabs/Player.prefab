@@ -183,6 +183,9 @@ MonoBehaviour:
   projectile: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
   isDrawDebug: 1
   maxCombo: 3
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4723275675227100512
 MonoBehaviour:
   m_ObjectHideFlags: 0
