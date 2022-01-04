@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 오브젝트의 체력을 관리하는 클래스
+/// </summary>
 public class Status : MonoBehaviour
 {
     [SerializeField] private int maxHP;

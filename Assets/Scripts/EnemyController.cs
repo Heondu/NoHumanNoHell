@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 적의 행동을 전체적으로 관리하는 클래스
+/// </summary>
 public class EnemyController : MonoBehaviour, ILivingEntity
 {
     private SpriteRenderer spriteRenderer;
@@ -11,7 +14,7 @@ public class EnemyController : MonoBehaviour, ILivingEntity
     private Transform target;
 
     [SerializeField] private Vector2 detectSize;
-    [SerializeField] private LayerMask detectLayerMask;
+    [SerializeField] private LayerMask detectLayer;
 
     private void Start()
     {
@@ -41,6 +44,7 @@ public class EnemyController : MonoBehaviour, ILivingEntity
         }
     }
 
+    //플레이어와 공유할 수 있는 클래스로 기능 분리 필요
     private IEnumerator Flash()
     {
         spriteRenderer.color = Color.red;
@@ -50,6 +54,7 @@ public class EnemyController : MonoBehaviour, ILivingEntity
         spriteRenderer.color = Color.black;
     }
 
+    //임시 함수, 행동 별로 별도의 클래스 제작 필요
     private void FSM()
     {
         Detect();
@@ -72,9 +77,12 @@ public class EnemyController : MonoBehaviour, ILivingEntity
         }
     }
 
+    /// <summary>
+    /// 플레이어를 감지하는 함수
+    /// </summary>
     private void Detect()
     {
-        Collider2D collider = Physics2D.OverlapBox(transform.position, detectSize, 0, detectLayerMask);
+        Collider2D collider = Physics2D.OverlapBox(transform.position, detectSize, 0, detectLayer);
         if (collider != null) target = collider.transform;
         else target = null;
     }

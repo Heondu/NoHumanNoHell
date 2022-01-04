@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 데이터를 관리하기 위한 클래스
+/// </summary>
 public class DBManager : MonoBehaviour
 {
     private static DBManager instance;
@@ -25,6 +28,11 @@ public class DBManager : MonoBehaviour
         messageDB = CSVReader.Read("DB/Message");
     }
 
+    /// <summary>
+    /// id에 해당하는 대사들을 list 형태로 전부 반환하는 함수
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public List<string> FindMessages(string id)
     {
         List<string> list = new List<string>();

@@ -159,7 +159,7 @@ MonoBehaviour:
   dashForceOnAir: 10
   dashTime: 0.2
   knockbackForce: 0
-  groundMask:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 256
 --- !u!114 &4723275675227100513
@@ -174,16 +174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5d97221aed683459f5e7e3b901322d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeDamage: 10
   meleeDistance: 2
   meleeCooldown: 0.5
-  rangedDamage: 5
   rangedDistance: 10
   rangedCooldown: 1
   projectile: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
   isDrawDebug: 1
   maxCombo: 3
-  groundMask:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 256
 --- !u!114 &4723275675227100512

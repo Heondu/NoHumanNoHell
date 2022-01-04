@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// 텍스트의 Fade In/Out 효과를 제어하는 클래스
+/// </summary>
 public class TextFadeInOut : MonoBehaviour
 {
     [SerializeField] private float fadeTime;

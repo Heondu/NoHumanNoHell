@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 플레이어와 적의 움직임을 제어한느 클래스
+/// </summary>
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
@@ -10,7 +13,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashForceOnAir;
     [SerializeField] private float dashTime;
     [SerializeField] private float knockbackForce;
-    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask groundLayer;
 
     private new Rigidbody2D rigidbody2D;
     private CapsuleCollider2D capsuleCollider2D;
@@ -21,7 +24,6 @@ public class Movement : MonoBehaviour
     private int currentDashCount = 0;
     private Vector3 moveDirection;
     private float angle;
-    private Vector2 perp;
 
     private void Start()
     {
@@ -76,18 +78,20 @@ public class Movement : MonoBehaviour
         rigidbody2D.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
+    /// <summary>
+    /// 바닥과 바닥의 경사도를 체크하는 함수
+    /// </summary>
     private void CheckForGround()
     {
         Bounds bounds = capsuleCollider2D.bounds;
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(bounds.center.x, bounds.min.y), Vector2.down, 0.1f, groundMask);
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(bounds.center.x, bounds.min.y), Vector2.down, 0.1f, groundLayer);
 
         if (hit)
         {
-            perp = Vector2.Perpendicular(hit.normal).normalized;
             angle = Vector2.Angle(hit.normal, Vector2.up);
-
             isSlope = angle != 0 ? true : false;
 
+            //점프하여 떨어지기 전까지는 바닥 확인을 건너 뜀
             if (rigidbody2D.velocity.y > 0) return;
 
             isGrounded = true;

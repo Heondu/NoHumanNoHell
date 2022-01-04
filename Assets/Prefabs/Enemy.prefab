@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectSize: {x: 10, y: 1}
-  detectLayerMask:
+  detectLayer:
     serializedVersion: 2
     m_Bits: 64
 --- !u!114 &597553966179119521
@@ -163,7 +163,7 @@ MonoBehaviour:
   dashForceOnAir: 0
   dashTime: 0
   knockbackForce: 3
-  groundMask:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 256
 --- !u!114 &597553966179119547
@@ -227,6 +227,9 @@ MonoBehaviour:
   distance: 1
   cooldown: 2
   delay: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &597553966179119545
 MonoBehaviour:
   m_ObjectHideFlags: 0

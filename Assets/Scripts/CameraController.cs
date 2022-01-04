@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 카메라의 움직임을 제어하고 카메라 이펙트를 관리하는 클래스
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform target;
@@ -22,6 +25,7 @@ public class CameraController : MonoBehaviour
         float height = Camera.main.orthographicSize;
         float width = height * Screen.width / Screen.height;
 
+        //카메라 이동 제한 범위 설정
         xMin = mapData.GetPosition().x + width;
         xMax = mapData.GetSize().x - width;
         yMin = mapData.GetPosition().y + height;
@@ -32,6 +36,7 @@ public class CameraController : MonoBehaviour
     {
         Follow();
         Clamp();
+        //Clamp와 무관하게 흔들기 위해 따로 흔들림 값을 더해 줌
         transform.position += shakeOffset;
     }
 
@@ -51,6 +56,11 @@ public class CameraController : MonoBehaviour
         transform.position = new Vector3(x, y, transform.position.z);
     }
 
+    /// <summary>
+    /// 카메라 흔들기
+    /// </summary>
+    /// <param name="amount">세기</param>
+    /// <param name="duration">지속 시간</param>
     public void Shake(float amount, float duration)
     {
         if (shakeCoroutine != null)
@@ -74,13 +84,19 @@ public class CameraController : MonoBehaviour
         shakeOffset = Vector3.zero;
     }
 
-    public void Slow(float speed, float duration)
+    // 클래스에 맞지 않는 함수. 함수 이동 필요
+    /// <summary>
+    /// 슬로우 모션
+    /// </summary>
+    /// <param name="timeScale"></param>
+    /// <param name="duration">지속 시간</param>
+    public void Slow(float timeScale, float duration)
     {
         if (slowCoroutine != null)
         {
             StopCoroutine(slowCoroutine);
         }
-        slowCoroutine = StartCoroutine(SlowCo(speed, duration));
+        slowCoroutine = StartCoroutine(SlowCo(timeScale, duration));
     }
 
     private IEnumerator SlowCo(float timeScale, float duration)
