@@ -1,18 +1,24 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// 플레이어와 적의 움직임을 제어한느 클래스
-/// </summary>
 public class Movement : MonoBehaviour
 {
+    [Header("Move")]
     [SerializeField] private float moveSpeed;
+
+    [Header("Jump")]
     [SerializeField] private float jumpForce;
     [SerializeField] private int jumpCount;
+
+    [Header("Dash")]
     [SerializeField] private float dashForceOnGround;
     [SerializeField] private float dashForceOnAir;
     [SerializeField] private float dashTime;
+
+    [Header("Knockback")]
     [SerializeField] private float knockbackForce;
+
+    [Header("Layer")]
     [SerializeField] private LayerMask groundLayer;
 
     private new Rigidbody2D rigidbody2D;
@@ -27,6 +33,11 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
+        Setup();
+    }
+
+    private void Setup()
+    {
         rigidbody2D = GetComponent<Rigidbody2D>();
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
@@ -36,7 +47,7 @@ public class Movement : MonoBehaviour
         CheckForGround();
     }
 
-    public void MoveTo(Vector3 direction)
+    public void Move(Vector3 direction)
     {
         moveDirection = direction;
         transform.position += direction * moveSpeed * Time.deltaTime;
@@ -57,19 +68,27 @@ public class Movement : MonoBehaviour
         if (isDash) return;
         if (currentDashCount != 0 && !isGrounded) return;
 
+        StopCoroutine("DashCo");
+        StartCoroutine("DashCo", direction);
+    }
+
+    private IEnumerator DashCo(Vector3 direction)
+    {
         isDash = true;
         currentDashCount++;
         rigidbody2D.velocity = Vector2.zero;
         rigidbody2D.AddForce(direction * (isGrounded ? dashForceOnGround : dashForceOnAir), ForceMode2D.Impulse);
-        StartCoroutine("StopDash");
-    }
 
-    private IEnumerator StopDash()
-    {
         yield return new WaitForSeconds(dashTime);
 
         rigidbody2D.velocity = Vector2.zero;
         isDash = false;
+    }
+
+    public void DashToLook()
+    {
+        Vector3 direction = (Utilities.GetMouseWorldPos() - transform.position).normalized;
+        Dash(direction);
     }
 
     public void Knockback(Vector3 direction)
@@ -78,9 +97,6 @@ public class Movement : MonoBehaviour
         rigidbody2D.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    /// <summary>
-    /// 바닥과 바닥의 경사도를 체크하는 함수
-    /// </summary>
     private void CheckForGround()
     {
         Bounds bounds = capsuleCollider2D.bounds;
@@ -91,7 +107,6 @@ public class Movement : MonoBehaviour
             angle = Vector2.Angle(hit.normal, Vector2.up);
             isSlope = angle != 0 ? true : false;
 
-            //점프하여 떨어지기 전까지는 바닥 확인을 건너 뜀
             if (rigidbody2D.velocity.y > 0) return;
 
             isGrounded = true;

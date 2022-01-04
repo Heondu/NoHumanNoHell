@@ -1,38 +1,51 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
-/// <summary>
-/// 오브젝트의 체력을 관리하는 클래스
-/// </summary>
+[System.Serializable]
+public class Modifier
+{
+    public StatusType Type;
+    public float Value;
+}
+
+public enum StatusType
+{
+    MaxHP,
+    CurrentHP,
+    MeleeAttackDamage,
+    MeleeAttackRange,
+    MeleeAttackDelay,
+    RangedAttackDamage,
+    RangedAttackRange,
+    RangedAttackDelay
+}
+
 public class Status : MonoBehaviour
 {
-    [SerializeField] private int maxHP;
-    private int currentHP;
-    [SerializeField] private bool canBeDamaged = true;
+    [SerializeField]
+    private Modifier[] modifiers;
 
-    private void Start()
+    [Header("Event")]
+    [HideInInspector] public UnityEvent<Status, StatusType, float, float> onModifierUpdate;
+
+    public float MaxHP => GetModifier(StatusType.MaxHP).Value;
+    public float CurrentHP
     {
-        currentHP = maxHP;
+        get => GetModifier(StatusType.CurrentHP).Value;
+        set => SetValue(StatusType.CurrentHP, Mathf.Clamp(value, 0f, MaxHP));
     }
 
-    public void TakeDamage(int amount)
-    {
-        if (!canBeDamaged) return;
+    public float GetValue(StatusType type) => GetModifier(type).Value;
 
-        currentHP = Mathf.Max(0, currentHP - amount);
+    public void SetValue(StatusType type, float value)
+    {
+        Modifier modifier = GetModifier(type);
+        float prevValue = modifier.Value;
+        modifier.Value = value;
+
+        onModifierUpdate.Invoke(this, type, value, prevValue);
     }
 
-    public void RestoreHP(int amount)
-    {
-        currentHP = Mathf.Min(maxHP, currentHP + amount);
-    }
-
-    public int GetCurrentHP()
-    {
-        return currentHP;
-    }
-
-    public float GetMaxHP()
-    {
-        return maxHP;
-    }
+    public Modifier GetModifier(StatusType type) => modifiers.First(x => x.Type == type);
 }

@@ -2,9 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 씬 전환시 부드럽게 전환을 위해 Fade In/Out을 제어하는 클래스
-/// </summary>
 public class SceneFadeInOut : MonoBehaviour
 {
     private Image image;
@@ -15,7 +12,6 @@ public class SceneFadeInOut : MonoBehaviour
     {
         image = GetComponent<Image>();
 
-        //씬 시작 시 페이드 아웃
         FadeOut(1);
     }
 
@@ -41,12 +37,10 @@ public class SceneFadeInOut : MonoBehaviour
     {
         Color color = image.color;
         float current = 0;
-        float percent = 0;
         while (current < fadeTime)
         {
             current += Time.deltaTime;
-            percent = current / fadeTime;
-            color.a = Mathf.Lerp(start, end, percent);
+            color.a = Mathf.Lerp(start, end, current / fadeTime);
             image.color = color;
             yield return null;
         }

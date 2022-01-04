@@ -315,7 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6373c3dbd9f2674da477905164d445a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetStatus: {fileID: 0}
+  slider: {fileID: 8466763193614223972}
+  text: {fileID: 8466763194475271481}
 --- !u!1 &8466763194350631683
 GameObject:
   m_ObjectHideFlags: 0

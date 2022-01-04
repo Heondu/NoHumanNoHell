@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// 오브젝트의 위치를 제한하는 클래스
-/// </summary>
 public class PositionClamper : MonoBehaviour
 {
     private MapData mapData;
@@ -19,7 +16,6 @@ public class PositionClamper : MonoBehaviour
         float width = bounds.max.x - bounds.min.x;
         float height = bounds.max.y - bounds.min.y;
 
-        //이동 제한 범위 설정
         xMin = mapData.GetPosition().x + width;
         xMax = mapData.GetSize().x - width;
         yMin = mapData.GetPosition().y + height;

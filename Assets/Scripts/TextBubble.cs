@@ -2,9 +2,6 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// 문자열을 출력하는 클래스
-/// </summary>
 public class TextBubble : MonoBehaviour
 {
     private TextMeshProUGUI text;
@@ -26,7 +23,6 @@ public class TextBubble : MonoBehaviour
     {
         text.text = "";
 
-        //지정한 시간 간격에 맞춰 문자열을 하나씩 출력
         for (int i = 0; i < message.Length; i++)
         {
             text.text += message[i];
@@ -44,9 +40,6 @@ public class TextBubble : MonoBehaviour
         SetPosition();
     }
 
-    /// <summary>
-    /// UI를 월드 좌표에 위치시키는 함수
-    /// </summary>
     private void SetPosition()
     {
         RectTransform CanvasRect = transform.root.GetComponent<RectTransform>();

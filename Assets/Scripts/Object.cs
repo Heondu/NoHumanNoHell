@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// 플레이어와 상호작용하며 대사를 출력하는 클래스
-/// </summary>
 public class Object : MonoBehaviour
 {
     [SerializeField] private string id;

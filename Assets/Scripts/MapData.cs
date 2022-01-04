@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// 맵의 이동 제한 범위를 설정하는 클래스
-/// </summary>
 public class MapData : MonoBehaviour
 {
     [Tooltip("왼쪽 하단 좌표")]
