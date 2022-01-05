@@ -8,10 +8,18 @@ public class SceneFadeInOut : MonoBehaviour
     private Coroutine fadeCoroutine;
     private float fadeTime;
 
-    private void Start()
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         image = GetComponent<Image>();
+    }
 
+    private void Start()
+    {
         FadeOut(1);
     }
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DBManager : MonoBehaviour
+public class DBManager
 {
     private static DBManager instance;
     public static DBManager Instance

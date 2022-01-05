@@ -7,7 +7,7 @@ public class PlayerHPViewer : MonoBehaviour
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI text;
 
-    private void Start()
+    private void Awake()
     {
         EventSetup();
     }

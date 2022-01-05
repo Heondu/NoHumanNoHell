@@ -74,6 +74,36 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!1 &4570048987841598760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1477732196781979270}
+  m_Layer: 6
+  m_Name: RangedAttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1477732196781979270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570048987841598760}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.185, y: 0.354, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4723275675227100515}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4723275675227100520
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,6 +144,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3828747714231029195}
+  - {fileID: 1477732196781979270}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -157,12 +188,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 9ed40cd851451a54fb55600cb66db386, type: 3}
+  m_Sprite: {fileID: -467307283419413426, guid: 91f909b6db1c22d4da34c281acf72392, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -181,7 +212,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.37}
   m_Size: {x: 0.2, y: 0.74}
   m_Direction: 0
 --- !u!50 &4723275675227100526
@@ -332,6 +363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultAttackType: 0
   projectilePrefab: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
+  rangedAttackPoint: {fileID: 1477732196781979270}
   canBeDamaged: 1
   onTakeDamage:
     m_PersistentCalls:

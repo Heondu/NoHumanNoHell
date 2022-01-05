@@ -3,22 +3,28 @@ using UnityEngine;
 public class MeleeAttackBox : MonoBehaviour
 {
     [SerializeField] private Entity owner;
-
     [SerializeField] LayerMask groundLayer;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Entity targetEntity = collision.GetComponent<Entity>();
-        if (!targetEntity || targetEntity.CompareTag(owner.tag))
+        Entity target = collision.GetComponent<Entity>();
+        if (!target || target.CompareTag(owner.tag))
+            return;
+        if (IsWallBetweenTarget(collision.transform))
             return;
 
+        target.TakeDamage(owner.gameObject, owner.Status.GetValue(StatusType.MeleeAttackDamage));
+    }
+
+    private bool IsWallBetweenTarget(Transform target)
+    {
         Vector3 origin = owner.transform.position;
-        Vector3 direction = (collision.transform.position - origin).normalized;
-        float distance = Vector3.Distance(origin, collision.transform.position);
+        Vector3 direction = (target.position - origin).normalized;
+        float distance = Vector3.Distance(origin, target.position);
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, groundLayer);
         if (hit)
-            return;
-
-        targetEntity.TakeDamage(owner.gameObject, owner.Status.GetValue(StatusType.MeleeAttackDamage));
+            return true;
+        else 
+            return false;
     }
 }

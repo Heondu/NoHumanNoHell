@@ -5,7 +5,7 @@ public class EnemyAnimationController : MonoBehaviour
     private Animator animator;
     private Movement movement;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
     }

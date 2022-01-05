@@ -12,12 +12,25 @@ public class Object : MonoBehaviour
     private TextBubbleCreator textBubbleCreator;
     [SerializeField] private Vector3 textOffset;
 
-    private void Start()
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         text = GetComponentInChildren<TextMeshPro>();
         text.gameObject.SetActive(false);
         textBubbleCreator = FindObjectOfType<TextBubbleCreator>();
+    }
 
+    private void Start()
+    {
+        GetMessagesFromDB();
+    }
+
+    private void GetMessagesFromDB()
+    {
         messages = DBManager.Instance.FindMessages(id);
     }
 

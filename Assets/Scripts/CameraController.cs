@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     private Coroutine shakeCoroutine;
     private Vector3 shakeOffset;
 
-    private void Start()
+    private void Awake()
     {
         ComponentSetup();
         ClampSetup();

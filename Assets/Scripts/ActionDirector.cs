@@ -6,7 +6,7 @@ public class ActionDirector : MonoBehaviour
     private CameraController cameraController;
     private Coroutine slowCoroutine;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
     }

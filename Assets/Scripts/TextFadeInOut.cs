@@ -7,10 +7,18 @@ public class TextFadeInOut : MonoBehaviour
     [SerializeField] private float fadeTime;
     private TextMeshProUGUI text;
 
-    private void Start()
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         text = GetComponent<TextMeshProUGUI>();
+    }
 
+    private void Start()
+    {
         StartCoroutine("FadeUpdate");
     }
 

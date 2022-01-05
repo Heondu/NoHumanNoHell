@@ -48,4 +48,9 @@ public class Status : MonoBehaviour
     }
 
     public Modifier GetModifier(StatusType type) => modifiers.First(x => x.Type == type);
+
+    private void Start()
+    {
+        CurrentHP = MaxHP;
+    }
 }

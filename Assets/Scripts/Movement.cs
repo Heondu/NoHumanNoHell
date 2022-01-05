@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
     private Vector3 moveDirection;
     private float angle;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
     }

@@ -9,16 +9,30 @@ public class PositionClamper : MonoBehaviour
     private float yMin;
     private float yMax;
 
-    private void Start()
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         mapData = FindObjectOfType<MapData>();
         bounds = GetComponent<CapsuleCollider2D>().bounds;
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
         float width = bounds.max.x - bounds.min.x;
         float height = bounds.max.y - bounds.min.y;
 
         xMin = mapData.GetPosition().x + width;
         xMax = mapData.GetSize().x - width;
-        yMin = mapData.GetPosition().y + height;
+        yMin = mapData.GetPosition().y;
         yMax = mapData.GetSize().y - height;
     }
 

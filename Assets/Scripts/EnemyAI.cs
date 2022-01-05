@@ -10,24 +10,21 @@ public enum EnemyState
 
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Detect")]
-    [SerializeField] private Vector2 detectRange;
-    [SerializeField] private LayerMask detectTargetLayer;
-
     [Header("Attack")]
-    [SerializeField] private float attackCastTime;
+    [SerializeField] protected float attackCastTime;
 
-    private Entity entity;
-    private Movement movement;
-    private Animator animator;
+    protected Entity entity;
+    protected Movement movement;
+    protected Animator animator;
+    protected IBehaviorTree enemyBT;
+    protected DetectBox detectBox;
 
-    private Entity target;
-    private EnemyState currentState;
+    protected Entity target;
+    protected bool isAttacking = false;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
-        ChangeState(EnemyState.Idle);
     }
 
     private void Setup()
@@ -35,99 +32,79 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         entity = GetComponent<Entity>();
         movement = GetComponent<Movement>();
+        enemyBT = GetComponent<IBehaviorTree>();
+        detectBox = GetComponentInChildren<DetectBox>();
     }
 
-    private void ChangeState(EnemyState newState)
+    private void Start()
     {
-        StopCoroutine(currentState.ToString());
-        currentState = newState;
-        StartCoroutine(currentState.ToString());
+        enemyBT.Init(this);
     }
 
-    private void Look(Vector3 direction)
+    private void Update()
     {
-        transform.localScale = new Vector3(direction.x < 0 ? -1f : 1f, 1f, 1f);
+        enemyBT.BTUpdate();
     }
 
-    private Entity Detect()
+    protected void Look(Vector3 direction)
     {
-        Collider2D collider = Physics2D.OverlapBox(transform.position, detectRange, 0, detectTargetLayer);
-        if (collider != null)
-            target = collider.GetComponent<Entity>();
-        else
-            target = null;
+        Vector3 localScale = transform.localScale;
+        localScale.x = Mathf.Sign(direction.x) * Mathf.Abs(localScale.x);
+        transform.localScale = localScale;
+    }
+
+    public void Detect()
+    {
+        target = detectBox.GetTarget();
+    }
+
+    public bool HasTarget()
+    {
         return target;
     }
 
-    private IEnumerator Idle()
+    public void Idle()
     {
-        while (true)
-        {
-            if (Detect())
-                ChangeState(EnemyState.Chase);
-
-            movement.Move(Vector3.zero);
-
-            yield return null;
-        }
+        movement.Move(Vector3.zero);
     }
 
-    private IEnumerator Chase()
+    public void Chase()
     {
-        while (true)
-        {
-            if (!Detect())
-                ChangeState(EnemyState.Idle);
-            else
-            {
-                if (!IsTargetInMeleeRange())
-                {
-                    Vector3 direction = (target.transform.position - transform.position).normalized;
-                    direction.y = 0;
-                    movement.Move(direction);
-                    Look(direction);
-                }
-                else
-                {
-                    movement.Move(Vector3.zero);
-                    ChangeState(EnemyState.Attack);
-                }
-            }
-
-            yield return null;
-        }
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        direction.y = 0;
+        movement.Move(direction);
+        Look(direction);
     }
 
-    private IEnumerator Attack()
+    public void Attack()
     {
+        StartCoroutine("AttackCo");
+    }
+
+    private IEnumerator AttackCo()
+    {
+        isAttacking = true;
+
         yield return new WaitForSeconds(attackCastTime);
 
-        while (true)
-        {
-            if (Detect())
-            {
-                if (IsTargetInMeleeRange())
-                {
-                    Vector3 direction = (target.transform.position - transform.position).normalized;
-                    Look(direction);
+        animator.Play("Attack");
 
-                    animator.Play("Attack");
+        yield return new WaitForSeconds(entity.Status.GetValue(StatusType.MeleeAttackDelay));
 
-                    yield return new WaitForSeconds(entity.Status.GetValue(StatusType.MeleeAttackDelay));
-                }
-                else
-                {
-                    ChangeState(EnemyState.Chase);
-                    yield return null;
-                }
-            }
-            else
-            {
-                ChangeState(EnemyState.Idle);
-                yield return null;
-            }
-        }
+        isAttacking = false;
     }
+
+    public void LookAtTarget()
+    {
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        Look(direction);
+    }
+
+    public bool IsAttacking()
+    {
+        return isAttacking;
+    }
+
     public bool IsTargetInMeleeRange()
     {
         float distance = Vector3.SqrMagnitude(target.transform.position - transform.position);

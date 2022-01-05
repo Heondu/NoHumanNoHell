@@ -14,6 +14,7 @@ public class Entity : MonoBehaviour
 
     [Header("Ranged Attack")]
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform rangedAttackPoint;
 
     [Header("Option")]
     [SerializeField] bool canBeDamaged = true;
@@ -28,7 +29,7 @@ public class Entity : MonoBehaviour
     public AttackType AttackType { get; set; }
     public GameObject ProjectilePrefab => projectilePrefab;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
     }
@@ -47,7 +48,7 @@ public class Entity : MonoBehaviour
 
     private void Shoot(Vector3 direction, float damage)
     {
-        PlayerProjectile clone = Instantiate(ProjectilePrefab, transform.position, Quaternion.identity).GetComponent<PlayerProjectile>();
+        PlayerProjectile clone = Instantiate(ProjectilePrefab, rangedAttackPoint.position, Quaternion.identity).GetComponent<PlayerProjectile>();
         clone.Setup(direction, Status.GetValue(StatusType.RangedAttackRange), (int)damage, gameObject);
     }
 

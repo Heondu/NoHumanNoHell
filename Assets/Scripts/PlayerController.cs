@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private Vector3 lookDirection;
 
-    private void Start()
+    private void Awake()
     {
         Setup();
     }
@@ -35,14 +35,6 @@ public class PlayerController : MonoBehaviour
         JumpUpdate();
         AttackUpdate();
         LookUpdate();
-    }
-
-    private void LookUpdate()
-    {
-        if (lookDirection.x != 0)
-            transform.localScale = new Vector3(Mathf.Sign(lookDirection.x), 1f, 1f);
-        else if (movement.GetMoveDirection().x != 0)
-            transform.localScale = new Vector3(Mathf.Sign(movement.GetMoveDirection().x), 1f, 1f);
     }
 
     private void MoveUpdate()
@@ -63,6 +55,16 @@ public class PlayerController : MonoBehaviour
             InputAttack(AttackType.MeleeAttack);
         else if (Input.GetMouseButtonDown(1))
             InputAttack(AttackType.RangedAttack);
+    }
+
+    private void LookUpdate()
+    {
+        Vector3 localScale = transform.localScale;
+        if (lookDirection.x != 0)
+            localScale.x = Mathf.Sign(lookDirection.x) * Mathf.Abs(localScale.x);
+        else if (movement.GetMoveDirection().x != 0)
+            localScale.x = Mathf.Sign(movement.GetMoveDirection().x) * Mathf.Abs(localScale.x);
+        transform.localScale = localScale;
     }
 
     private void InputAttack(AttackType attackType)

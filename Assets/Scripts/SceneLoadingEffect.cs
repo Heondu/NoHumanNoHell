@@ -9,7 +9,12 @@ public class SceneLoadingEffect : MonoBehaviour
     private GameObject player;
     private SceneLoader sceneLoader;
 
-    private void Start()
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         sceneLoader = GetComponent<SceneLoader>();
     }

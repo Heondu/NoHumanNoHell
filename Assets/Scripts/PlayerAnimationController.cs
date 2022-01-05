@@ -5,7 +5,7 @@ public class PlayerAnimationController : MonoBehaviour
     private Animator animator;
     private Movement movement;
 
-    private void Start()
+    private void Awake()
     {
         ComponentSetup();
         EventSetup();
