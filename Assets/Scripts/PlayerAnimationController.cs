@@ -20,6 +20,7 @@ public class PlayerAnimationController : MonoBehaviour
     private void EventSetup()
     {
         GetComponent<PlayerController>().onAttack.AddListener(OnAttack);
+        GetComponent<PlayerController>().onJump.AddListener(OnJump);
     }
 
     private void Update()
@@ -30,9 +31,16 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void OnAttack(Entity entity, AttackType attackType, int comboCount)
     {
-        if (attackType == AttackType.MeleeAttack)
-            animator.Play("Player_MeleeAttack" + comboCount);
-        else
-            animator.Play("Player_RangedAttack");
+        switch (attackType)
+        {
+            case AttackType.MeleeAttack: animator.Play("MeleeAttack" + comboCount); break;
+            case AttackType.StrongMeleeAttack: animator.Play("MeleeAttack_Strong"); break;
+            case AttackType.RangedAttack: animator.Play("RangedAttack"); break;
+        }  
+    }
+
+    private void OnJump()
+    {
+        animator.Rebind();
     }
 }

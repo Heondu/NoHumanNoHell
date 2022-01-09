@@ -22,21 +22,9 @@ MonoBehaviour:
       - attackType: 0
         damage: 20
         nextNodes: []
-      - attackType: 1
-        damage: 20
-        nextNodes: []
-    - attackType: 1
-      damage: 15
-      nextNodes:
-      - attackType: 1
-        damage: 15
-        nextNodes: []
   - attackType: 1
+    damage: 20
+    nextNodes: []
+  - attackType: 2
     damage: 5
-    nextNodes:
-    - attackType: 1
-      damage: 10
-      nextNodes:
-      - attackType: 1
-        damage: 25
-        nextNodes: []
+    nextNodes: []

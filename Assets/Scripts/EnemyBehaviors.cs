@@ -46,7 +46,7 @@ namespace BehaviorTree
 
         public override bool Invoke()
         {
-            enemyAI.Idle();
+            enemyAI.Patrol();
             return reverse ? false : true;
         }
     }
@@ -99,7 +99,7 @@ namespace BehaviorTree
         }
     }
 
-    public class IsAttacking : BTNode
+    public class CanAttack : BTNode
     {
         private EnemyAI enemyAI;
 
@@ -110,11 +110,11 @@ namespace BehaviorTree
 
         public override bool Invoke()
         {
-            return reverse ? !enemyAI.IsAttacking() : enemyAI.IsAttacking();
+            return reverse ? !enemyAI.CanAttack() : enemyAI.CanAttack();
         }
     }
 
-    public class IsTargetInMeleeRange : BTNode
+    public class IsTargetInAttackRange : BTNode
     {
         private EnemyAI enemyAI;
 
@@ -125,7 +125,7 @@ namespace BehaviorTree
 
         public override bool Invoke()
         {
-            bool flag = reverse ? !enemyAI.IsTargetInMeleeRange() : enemyAI.IsTargetInMeleeRange();
+            bool flag = reverse ? !enemyAI.IsTargetInAttackRange() : enemyAI.IsTargetInAttackRange();
             return flag;
         }
     }
@@ -142,6 +142,68 @@ namespace BehaviorTree
         public override bool Invoke()
         {
             bossAI.ChargeAttack();
+            return reverse ? false : true;
+        }
+    }
+
+    public class Idle : BTNode
+    {
+        private EnemyAI enemyAI;
+
+        public void Init(EnemyAI enemyAI)
+        {
+            this.enemyAI = enemyAI;
+        }
+
+        public override bool Invoke()
+        {
+            enemyAI.Idle();
+            return reverse ? false : true;
+        }
+    }
+
+    public class IsClosePatrolPos : BTNode
+    {
+        private EnemyAI enemyAI;
+
+        public void Init(EnemyAI enemyAI)
+        {
+            this.enemyAI = enemyAI;
+        }
+
+        public override bool Invoke()
+        {
+            return reverse ? !enemyAI.IsClosePatolPos() : enemyAI.IsClosePatolPos();
+        }
+    }
+
+    public class IsReachablePos : BTNode
+    {
+        private EnemyAI enemyAI;
+
+        public void Init(EnemyAI enemyAI)
+        {
+            this.enemyAI = enemyAI;
+        }
+
+        public override bool Invoke()
+        {
+            return reverse ? !enemyAI.IsReachablePos() : enemyAI.IsReachablePos();
+        }
+    }
+
+    public class FindPatrolPos : BTNode
+    {
+        private EnemyAI enemyAI;
+
+        public void Init(EnemyAI enemyAI)
+        {
+            this.enemyAI = enemyAI;
+        }
+
+        public override bool Invoke()
+        {
+            enemyAI.FindPatrolPos();
             return reverse ? false : true;
         }
     }

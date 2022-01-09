@@ -28,8 +28,8 @@ public class SceneLoadingEffect : MonoBehaviour
             isPlayerEnter = true;
             player = collision.gameObject;
             player.GetComponent<PositionClamper>().enabled = false;
-            player.GetComponent<Rigidbody2D>().isKinematic = true;
-            player.GetComponent<CapsuleCollider2D>().enabled = false;
+            player.GetComponent<Entity>().SetCanBeDamaged(false);
+            Camera.main.GetComponent<CameraController>().StopFollow();
 
             FindObjectOfType<SceneFadeInOut>().FadeIn(delay);
 

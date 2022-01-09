@@ -18,9 +18,16 @@ public class EnemyAI : MonoBehaviour
     protected Animator animator;
     protected IBehaviorTree enemyBT;
     protected DetectBox detectBox;
+    protected CapsuleCollider2D capsuleCollider2D;
 
     protected Entity target;
     protected bool isAttacking = false;
+
+    private Vector3 originPos;
+    private Vector3 patrolPosition;
+    [SerializeField] private float patrolTime;
+    [SerializeField] private float patrolRange;
+    private bool isPatrol;
 
     private void Awake()
     {
@@ -34,11 +41,13 @@ public class EnemyAI : MonoBehaviour
         movement = GetComponent<Movement>();
         enemyBT = GetComponent<IBehaviorTree>();
         detectBox = GetComponentInChildren<DetectBox>();
+        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
 
     private void Start()
     {
         enemyBT.Init(this);
+        originPos = transform.position;
     }
 
     private void Update()
@@ -68,6 +77,55 @@ public class EnemyAI : MonoBehaviour
         movement.Move(Vector3.zero);
     }
 
+    public void Patrol()
+    {
+        if (!isPatrol)
+            StartCoroutine("PatrolCo");
+
+        Vector3 direction = (patrolPosition - transform.position).normalized;
+        movement.Move(direction);
+        Look(direction);
+    }
+
+    public bool IsClosePatolPos()
+    {
+        return (Vector3.SqrMagnitude(patrolPosition - transform.position) < 0.5f);
+    }
+
+    public bool IsReachablePos()
+    {
+        Vector3 direction = (patrolPosition - transform.position).normalized;
+
+        LayerMask EnemyLayer = 1 << LayerMask.NameToLayer("Enemy");
+        LayerMask groundLayer = 1 << LayerMask.NameToLayer("Ground");
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(capsuleCollider2D.bounds.center, direction, 0.5f, EnemyLayer + groundLayer);
+        foreach (RaycastHit2D hit in hits)
+            if (hit.collider.gameObject != gameObject)
+                return false;
+
+        RaycastHit2D hitGround = Physics2D.Raycast(transform.position + direction * 0.5f, Vector2.down, 0.1f, groundLayer);
+        if (!hitGround)
+            return false;
+
+        return true;
+    }
+
+    public void FindPatrolPos()
+    {
+        if (!isPatrol)
+            patrolPosition = new Vector3(Random.Range(originPos.x - patrolRange, originPos.x + patrolRange), originPos.y, originPos.z);
+    }
+
+    private IEnumerator PatrolCo()
+    {
+        isPatrol = true;
+
+        yield return new WaitForSeconds(patrolTime);
+
+        isPatrol = false;
+    }
+
     public void Chase()
     {
         Vector3 direction = (target.transform.position - transform.position).normalized;
@@ -78,20 +136,36 @@ public class EnemyAI : MonoBehaviour
 
     public void Attack()
     {
+        entity.SetAttackTimer();
         StartCoroutine("AttackCo");
     }
 
     private IEnumerator AttackCo()
     {
-        isAttacking = true;
-
         yield return new WaitForSeconds(attackCastTime);
 
-        animator.Play("Attack");
+        if (entity.AttackType == AttackType.MeleeAttack)
+        {
+            animator.Play("Attack");
+            yield return new WaitForSeconds(entity.Status.GetValue(StatusType.MeleeAttackDelay));
+        }
+        else if (entity.AttackType == AttackType.RangedAttack)
+        {
+            if (HasTarget())
+                Shoot((target.Position - entity.RangedAttackPoint.position).normalized);
+            yield return new WaitForSeconds(entity.Status.GetValue(StatusType.RangedAttackDelay));
+        }
+    }
 
-        yield return new WaitForSeconds(entity.Status.GetValue(StatusType.MeleeAttackDelay));
+    public void Shoot(Vector3 direction)
+    {
+        Shoot(direction, entity.Status.GetValue(StatusType.RangedAttackDamage));
+    }
 
-        isAttacking = false;
+    private void Shoot(Vector3 direction, float damage)
+    {
+        Projectile clone = Instantiate(entity.ProjectilePrefab, entity.RangedAttackPoint.position, Quaternion.identity).GetComponent<Projectile>();
+        clone.Setup(direction, (int)damage, gameObject);
     }
 
     public void LookAtTarget()
@@ -100,15 +174,15 @@ public class EnemyAI : MonoBehaviour
         Look(direction);
     }
 
-    public bool IsAttacking()
+    public bool CanAttack()
     {
-        return isAttacking;
+        return entity.CanAttack();
     }
 
-    public bool IsTargetInMeleeRange()
+    public bool IsTargetInAttackRange()
     {
         float distance = Vector3.SqrMagnitude(target.transform.position - transform.position);
-        float range = entity.Status.GetValue(StatusType.MeleeAttackRange);
+        float range = entity.AttackType == AttackType.MeleeAttack ? entity.Status.GetValue(StatusType.MeleeAttackRange) : entity.Status.GetValue(StatusType.RangedAttackRange);
         return distance <= range * range;
     }
 }

@@ -14,6 +14,15 @@ public class MeleeAttackBox : MonoBehaviour
             return;
 
         target.TakeDamage(owner.gameObject, owner.Status.GetValue(StatusType.MeleeAttackDamage));
+        Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;
+        if (owner.AttackType == AttackType.MeleeAttack)
+        {
+            target.GetComponent<Movement>().Knockback(direction);
+        }
+        if (owner.AttackType == AttackType.StrongMeleeAttack)
+        {
+            target.GetComponent<Movement>().Knockback(direction * 3);
+        }
     }
 
     private bool IsWallBetweenTarget(Transform target)
@@ -26,5 +35,10 @@ public class MeleeAttackBox : MonoBehaviour
             return true;
         else 
             return false;
+    }
+
+    public Entity GetOwner()
+    {
+        return owner;
     }
 }

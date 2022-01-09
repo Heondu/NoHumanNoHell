@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ComboTree comboTree;
 
     [HideInInspector] public UnityEvent<Entity, AttackType, int> onAttack;
+    [HideInInspector] public UnityEvent onJump;
 
     private Movement movement;
     private Entity entity;
@@ -46,7 +47,10 @@ public class PlayerController : MonoBehaviour
     private void JumpUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            onJump.Invoke();
             movement.Jump(Vector3.up);
+        }
     }
 
     private void AttackUpdate()
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
             InputAttack(AttackType.MeleeAttack);
         else if (Input.GetMouseButtonDown(1))
-            InputAttack(AttackType.RangedAttack);
+            InputAttack(AttackType.StrongMeleeAttack);
     }
 
     private void LookUpdate()
@@ -72,7 +76,7 @@ public class PlayerController : MonoBehaviour
         entity.AttackType = attackType;
         isInputAttack = true;
 
-        if (!isAttacking)
+        if (entity.CanAttack())
             TryAttack();
     }
     
@@ -85,8 +89,9 @@ public class PlayerController : MonoBehaviour
         {
             entity.Status.SetValue(StatusType.MeleeAttackDamage, currentComboNode.Damage);
             ++currentComboCount;
-            isAttacking = true;
+            entity.SetAttackTimer();
 
+            StopCoroutine("Attack");
             StartCoroutine("Attack");
         }
     }
@@ -100,6 +105,11 @@ public class PlayerController : MonoBehaviour
     {
         currentComboCount = 0;
         isInputAttack = false;
+        AttackEnd();
+    }
+
+    private void AttackEnd()
+    {
         lookDirection = Vector3.zero;
     }
 
@@ -107,19 +117,26 @@ public class PlayerController : MonoBehaviour
     {
         isInputAttack = false;
         lookDirection = (Utilities.GetMouseWorldPos() - transform.position).normalized;
-
-        if (entity.AttackType == AttackType.RangedAttack)
-            entity.Shoot(lookDirection);
+        LookUpdate();
 
         onAttack.Invoke(entity, entity.AttackType, currentComboCount);
 
         yield return new WaitForSeconds(entity.GetAttackDelay());
 
-        isAttacking = false;
-
         if (isInputAttack)
             TryAttack();
         else
             ResetAttackParameter();
+    }
+
+    public void Shoot(Vector3 direction)
+    {
+        Shoot(direction, entity.Status.GetValue(StatusType.RangedAttackDamage));
+    }
+
+    private void Shoot(Vector3 direction, float damage)
+    {
+        Projectile clone = Instantiate(entity.ProjectilePrefab, entity.RangedAttackPoint.position, Quaternion.identity).GetComponent<Projectile>();
+        clone.Setup(direction, (int)damage, gameObject);
     }
 }

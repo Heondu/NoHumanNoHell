@@ -11,7 +11,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private int jumpCount;
 
     [Header("Dash")]
-    [SerializeField] private float dashForceOnGround;
+    [SerializeField] private float dashForceDefault;
+    [SerializeField] private float dashForceStrong;
     [SerializeField] private float dashForceOnAir;
     [SerializeField] private float dashTime;
 
@@ -65,19 +66,27 @@ public class Movement : MonoBehaviour
 
     public void Dash(Vector3 direction)
     {
-        if (isDash) return;
-        if (currentDashCount != 0 && !isGrounded) return;
-
         StopCoroutine("DashCo");
-        StartCoroutine("DashCo", direction);
+        StartCoroutine("DashCo", direction * (isGrounded ? dashForceDefault : dashForceOnAir));
     }
 
-    private IEnumerator DashCo(Vector3 direction)
+    private void Dash(Vector3 direction, float force)
     {
+        StopCoroutine("DashCo");
+        StartCoroutine("DashCo", direction * force);
+    }
+
+    private IEnumerator DashCo(Vector3 force)
+    {
+        if (isDash)
+            yield break;
+        if (currentDashCount != 0 && !isGrounded)
+            yield break;
+
         isDash = true;
-        currentDashCount++;
+        ++currentDashCount;
         rigidbody2D.velocity = Vector2.zero;
-        rigidbody2D.AddForce(direction * (isGrounded ? dashForceOnGround : dashForceOnAir), ForceMode2D.Impulse);
+        rigidbody2D.AddForce(force, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(dashTime);
 
@@ -85,10 +94,20 @@ public class Movement : MonoBehaviour
         isDash = false;
     }
 
-    public void DashToLook()
+    public void DashToLookWeek()
     {
-        Vector3 direction = (Utilities.GetMouseWorldPos() - transform.position).normalized;
-        Dash(direction);
+        if (isGrounded)
+            Dash(new Vector3(transform.localScale.x, 0, 0), dashForceDefault);
+        else
+            Dash((Utilities.GetMouseWorldPos() - transform.position).normalized);
+    }
+
+    public void DashToLookStrong()
+    {
+        if (isGrounded)
+            Dash(new Vector3(transform.localScale.x, 0, 0), dashForceStrong);
+        else
+            Dash((Utilities.GetMouseWorldPos() - transform.position).normalized);
     }
 
     public void Knockback(Vector3 direction)

@@ -14,7 +14,9 @@ public class CameraController : MonoBehaviour
     private Coroutine shakeCoroutine;
     private Vector3 shakeOffset;
 
-    private void Awake()
+    private bool follow = true;
+
+    private void Start()
     {
         ComponentSetup();
         ClampSetup();
@@ -47,6 +49,7 @@ public class CameraController : MonoBehaviour
     private void Follow()
     {
         if (target == null) return;
+        if (!follow) return;
 
         Vector3 targetPos = target.position;
         targetPos.z = transform.position.z;
@@ -77,5 +80,15 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
         shakeOffset = Vector3.zero;
+    }
+
+    public void StopFollow()
+    {
+        follow = false;
+    }
+
+    public void StartFollow()
+    {
+        follow = true;
     }
 }

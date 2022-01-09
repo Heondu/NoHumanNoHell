@@ -7,17 +7,17 @@ public class BossBT : MonoBehaviour, IBehaviorTree
     private Selector selector = new Selector();
     private Sequence seqAttack = new Sequence();
     private Sequence seqChase = new Sequence();
-    private Sequence seqPatrol = new Sequence();
+    private Sequence seqIdle = new Sequence();
 
     private Detect detect = new Detect();
     private ChargeAttack chargeAttack = new ChargeAttack();
-    private IsAttacking isAttacking = new IsAttacking();
-    private IsAttacking isNotAttacking = new IsAttacking();
+    private CanAttack canAttack = new CanAttack();
     private HasTarget hasTarget = new HasTarget();
-    private IsTargetInMeleeRange isTargetInMeleeRange = new IsTargetInMeleeRange();
-    private IsTargetInMeleeRange isNotTargetInMeleeRange = new IsTargetInMeleeRange();
+    private IsTargetInAttackRange isTargetInAttackRange = new IsTargetInAttackRange();
+    private IsTargetInAttackRange isNotTargetInAttackRange = new IsTargetInAttackRange();
+    private LookAtTarget lookAtTarget = new LookAtTarget();
     private Chase chase = new Chase();
-    private Patrol patrol = new Patrol();
+    private Idle idle = new Idle();
 
     public void Init(EnemyAI enemyAI)
     {
@@ -26,30 +26,30 @@ public class BossBT : MonoBehaviour, IBehaviorTree
 
         selector.AddChild(seqAttack);
         selector.AddChild(seqChase);
-        selector.AddChild(seqPatrol);
+        selector.AddChild(seqIdle);
 
         seqAttack.AddChild(hasTarget);
-        seqAttack.AddChild(isTargetInMeleeRange);
-        seqAttack.AddChild(isNotAttacking);
+        seqAttack.AddChild(isTargetInAttackRange);
+        seqAttack.AddChild(canAttack);
+        seqAttack.AddChild(lookAtTarget);
         seqAttack.AddChild(chargeAttack);
 
         seqChase.AddChild(hasTarget);
-        seqChase.AddChild(isNotTargetInMeleeRange);
+        seqChase.AddChild(isNotTargetInAttackRange);
         seqChase.AddChild(chase);
 
-        seqPatrol.AddChild(patrol);
+        seqIdle.AddChild(idle);
 
         detect.Init(enemyAI);
         chargeAttack.Init((BossAI)enemyAI);
-        isAttacking.Init(enemyAI);
-        isNotAttacking.Init(enemyAI);
-        isNotAttacking.reverse = true;
+        canAttack.Init(enemyAI);
         hasTarget.Init(enemyAI);
-        isTargetInMeleeRange.Init(enemyAI);
-        isNotTargetInMeleeRange.Init(enemyAI);
-        isNotTargetInMeleeRange.reverse = true;
+        isTargetInAttackRange.Init(enemyAI);
+        isNotTargetInAttackRange.Init(enemyAI);
+        isNotTargetInAttackRange.reverse = true;
+        lookAtTarget.Init(enemyAI);
         chase.Init(enemyAI);
-        patrol.Init(enemyAI);
+        idle.Init(enemyAI);
     }
 
     public void BTUpdate()

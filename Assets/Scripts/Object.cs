@@ -1,16 +1,19 @@
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public enum MessageTriggerType
+{
+    Start,
+    Enter,
+    Interact
+}
+
 public class Object : MonoBehaviour
 {
-    [SerializeField] private string id;
+    [SerializeField] private MessageTriggerType messageTriggerType;
+    private Message message;
     private TextMeshPro text;
-    private List<string> messages;
-    private int currentIndex = 0;
     private bool isPlayerEnter = false;
-    private TextBubbleCreator textBubbleCreator;
-    [SerializeField] private Vector3 textOffset;
 
     private void Awake()
     {
@@ -19,56 +22,55 @@ public class Object : MonoBehaviour
 
     private void Setup()
     {
+        message = GetComponent<Message>();
         text = GetComponentInChildren<TextMeshPro>();
         text.gameObject.SetActive(false);
-        textBubbleCreator = FindObjectOfType<TextBubbleCreator>();
     }
 
     private void Start()
     {
-        GetMessagesFromDB();
-    }
-
-    private void GetMessagesFromDB()
-    {
-        messages = DBManager.Instance.FindMessages(id);
+        if (messageTriggerType == MessageTriggerType.Start)
+            message.ShowMessage();
     }
 
     private void Update()
     {
-        if (!isPlayerEnter) return;
+        MessageUpdate();
+    }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (currentIndex < messages.Count)
-            {
-                textBubbleCreator.ShowBubble(messages[currentIndex], transform.position + textOffset);
-                currentIndex++;
-
-                if (currentIndex >= messages.Count)
-                {
-                    currentIndex = 0;
-                }
-            }
-        }
+    private void MessageUpdate()
+    {
+        if (messageTriggerType == MessageTriggerType.Interact && isPlayerEnter && Input.GetKeyDown(KeyCode.E))
+            message.ShowMessage();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
-        {
-            isPlayerEnter = true;
-            text.gameObject.SetActive(true);
-        }
+            SetMessageVariables();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
-        {
-            isPlayerEnter = false;
+            ResetMessageVariables();
+    }
+
+    private void SetMessageVariables()
+    {
+        if (messageTriggerType == MessageTriggerType.Enter)
+            message.ShowMessage();
+        else if (messageTriggerType == MessageTriggerType.Interact)
+            text.gameObject.SetActive(true);
+        isPlayerEnter = true;
+    }
+
+    private void ResetMessageVariables()
+    {
+        if (messageTriggerType == MessageTriggerType.Interact)
             text.gameObject.SetActive(false);
-            currentIndex = 0;
-        }
+
+        isPlayerEnter = false;
+        message.ResetIndex();
     }
 }

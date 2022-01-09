@@ -1,54 +1,77 @@
 using UnityEngine;
 
-public class PlayerProjectile : MonoBehaviour
+public class PlayerProjectile : Projectile
 {
-    private ProjectileMover projectileMover;
-    [SerializeField] private Vector2 direction;
-    private float maxDistance;
-    private int damage;
-    private GameObject instigator;
+    [SerializeField] private float maxDistance;
+
     private bool isReturn = false;
     private Vector3 startPos;
-    [SerializeField] private LayerMask groundMask;
+    private Entity entity;
 
-    public void Setup(Vector2 direction, float maxDistance, int damage, GameObject instigator)
+    public override void Setup(Vector2 direction, int damage, GameObject instigator)
     {
-        projectileMover = GetComponent<ProjectileMover>();
-        this.direction = direction;
-        this.maxDistance = maxDistance;
-        this.damage = damage;
-        this.instigator = instigator;
+        base.Setup(direction, damage, instigator);
+
         startPos = instigator.transform.position;
+        entity = instigator.GetComponent<Entity>();
     }
 
     private void Update()
     {
-        if (instigator != null)
+        MoveUpdate();
+        Rotate();
+    }
+
+    private void MoveUpdate()
+    {
+        if (instigator == null)
         {
-            projectileMover.MoveTo(direction);
+            Destroy(gameObject);
+            return;
+        }
 
-            if (!isReturn)
-            {
-                float distance = Mathf.Abs(Vector2.SqrMagnitude(startPos - transform.position));
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.1f, groundMask);
-                if (distance >= maxDistance || hit)
-                {
-                    isReturn = true;
-                    GetComponent<CircleCollider2D>().enabled = false;
-                }
-            }
-            else
-            {
-                direction = (instigator.transform.position - transform.position).normalized;
+        Move();
 
-                float distance = Mathf.Abs(Vector2.SqrMagnitude(instigator.transform.position - transform.position));
-                if (distance <= 0.5f)
-                {
-                    Destroy(gameObject);
-                }
-            }
+        if (!isReturn)
+        {
+            ReturnCheckAndSet();
         }
         else
+        {
+            SetDirectionToTarget();
+            DistanceCheckAndDestroy();
+        }
+    }
+
+    private bool IsGreaterThanMaxDistance()
+    {
+        float distance = Mathf.Abs(Vector2.SqrMagnitude(startPos - transform.position));
+        return distance >= maxDistance;
+    }
+
+    private bool IsHitTheWall()
+    {
+        return Physics2D.Raycast(transform.position, direction, 0.1f, groundMask);
+    }
+
+    private void ReturnCheckAndSet()
+    {
+        if (IsGreaterThanMaxDistance() || IsHitTheWall())
+        {
+            isReturn = true;
+            GetComponent<CircleCollider2D>().enabled = false;
+        }
+    }
+
+    private void SetDirectionToTarget()
+    {
+        direction = (entity.Position - transform.position).normalized;
+    }
+
+    private void DistanceCheckAndDestroy()
+    {
+        float distance = Mathf.Abs(Vector2.SqrMagnitude(instigator.transform.position - transform.position));
+        if (distance <= 0.5f)
         {
             Destroy(gameObject);
         }

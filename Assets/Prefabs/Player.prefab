@@ -188,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -467307283419413426, guid: 91f909b6db1c22d4da34c281acf72392, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9ed40cd851451a54fb55600cb66db386, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -252,6 +252,9 @@ MonoBehaviour:
   onAttack:
     m_PersistentCalls:
       m_Calls: []
+  onJump:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4723275675227100514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +270,8 @@ MonoBehaviour:
   moveSpeed: 3
   jumpForce: 5
   jumpCount: 2
-  dashForceOnGround: 5
+  dashForceDefault: 5
+  dashForceStrong: 15
   dashForceOnAir: 10
   dashTime: 0.2
   knockbackForce: 0
@@ -298,11 +302,17 @@ MonoBehaviour:
   - Type: 4
     Value: 0.5
   - Type: 5
-    Value: 5
+    Value: 10
   - Type: 6
     Value: 10
   - Type: 7
     Value: 1
+  - Type: 8
+    Value: 5
+  - Type: 9
+    Value: 10
+  - Type: 10
+    Value: 2
   onModifierUpdate:
     m_PersistentCalls:
       m_Calls: []
@@ -362,8 +372,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultAttackType: 0
-  projectilePrefab: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
-  rangedAttackPoint: {fileID: 1477732196781979270}
+  ProjectilePrefab: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
+  RangedAttackPoint: {fileID: 1477732196781979270}
   canBeDamaged: 1
   onTakeDamage:
     m_PersistentCalls:
@@ -382,7 +392,19 @@ MonoBehaviour:
         m_CallState: 2
   onDead:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9015139011594674925, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5141737906368447676
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public enum AttackType
 {
     MeleeAttack,
+    StrongMeleeAttack,
     RangedAttack
 }
 
@@ -13,21 +16,23 @@ public class Entity : MonoBehaviour
     [SerializeField] private AttackType defaultAttackType;
 
     [Header("Ranged Attack")]
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private Transform rangedAttackPoint;
+    public GameObject ProjectilePrefab;
+    public Transform RangedAttackPoint;
 
     [Header("Option")]
     [SerializeField] bool canBeDamaged = true;
 
     private Movement movement;
+    private CapsuleCollider2D capsuleCollider2D;
 
     [Header("Event")]
-    public UnityEvent<Entity, GameObject, float> onTakeDamage;
+    public UnityEvent<Entity, float> onTakeDamage;
     public UnityEvent<Entity> onDead;
 
     public Status Status { get; private set; }
     public AttackType AttackType { get; set; }
-    public GameObject ProjectilePrefab => projectilePrefab;
+    public Vector3 Position => capsuleCollider2D.bounds.center;
+    private List<AttackTimer> attackTimers = new List<AttackTimer>();
 
     private void Awake()
     {
@@ -38,18 +43,8 @@ public class Entity : MonoBehaviour
     {
         Status = GetComponent<Status>();
         movement = GetComponent<Movement>();
+        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         AttackType = defaultAttackType;
-    }
-
-    public void Shoot(Vector3 direction)
-    {
-        Shoot(direction, Status.GetValue(StatusType.RangedAttackDamage));
-    }
-
-    private void Shoot(Vector3 direction, float damage)
-    {
-        PlayerProjectile clone = Instantiate(ProjectilePrefab, rangedAttackPoint.position, Quaternion.identity).GetComponent<PlayerProjectile>();
-        clone.Setup(direction, Status.GetValue(StatusType.RangedAttackRange), (int)damage, gameObject);
     }
 
     public void TakeDamage(GameObject instigator, float damage)
@@ -58,10 +53,9 @@ public class Entity : MonoBehaviour
 
         Status.CurrentHP -= damage;
 
-        Vector3 direction = (transform.position - instigator.transform.position).normalized;
-        movement.Knockback(direction);
+        movement.Knockback((transform.position - instigator.transform.position).normalized);
 
-        onTakeDamage.Invoke(this, instigator, damage);
+        onTakeDamage.Invoke(this, damage);
 
         if (Status.CurrentHP == 0f)
             onDead.Invoke(this);
@@ -69,6 +63,70 @@ public class Entity : MonoBehaviour
 
     public float GetAttackDelay()
     {
-        return AttackType == AttackType.MeleeAttack ? Status.GetValue(StatusType.MeleeAttackDelay) : Status.GetValue(StatusType.RangedAttackDelay);
+        return GetAttackDelay(AttackType);
+    }
+
+    public float GetAttackDelay(AttackType attackType)
+    {
+        switch (attackType)
+        {
+            case AttackType.MeleeAttack: return Status.GetValue(StatusType.MeleeAttackDelay);
+            case AttackType.StrongMeleeAttack: return Status.GetValue(StatusType.StrongMeleeAttackDelay);
+            case AttackType.RangedAttack: return Status.GetValue(StatusType.RangedAttackDelay);
+            default: return 0f;
+        }
+    }
+
+    public void SetCanBeDamaged(bool value)
+    {
+        canBeDamaged = value;
+    }
+
+    public bool CanAttack()
+    {
+        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.AttackType == AttackType);
+        if (attackTimer == null)
+            return true;
+        return attackTimer.CanAttack();
+    }
+
+    public void SetAttackTimer()
+    {
+        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.AttackType == AttackType);
+        if (attackTimer == null)
+            AddAttackTimer();
+        else
+            attackTimer.SetTime();
+    }
+
+    private void AddAttackTimer()
+    {
+        AttackTimer attackTimer = new AttackTimer();
+        attackTimer.Setup(this, AttackType);
+        attackTimer.SetTime();
+        attackTimers.Add(attackTimer);
+    }
+}
+
+public class AttackTimer
+{
+    private Entity entity;
+    public AttackType AttackType { get; private set; }
+    private float time;
+    
+    public void Setup(Entity entity, AttackType attackType)
+    {
+        this.entity = entity;
+        this.AttackType = attackType;
+    }
+
+    public void SetTime()
+    {
+        time = Time.time;
+    }
+
+    public bool CanAttack()
+    {
+        return Time.time - time >= entity.GetAttackDelay(AttackType);
     }
 }

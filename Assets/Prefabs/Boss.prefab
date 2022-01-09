@@ -164,7 +164,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.74}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -222,7 +222,8 @@ MonoBehaviour:
   moveSpeed: 1
   jumpForce: 0
   jumpCount: 0
-  dashForceOnGround: 10
+  dashForceDefault: 15
+  dashForceStrong: 0
   dashForceOnAir: 10
   dashTime: 3
   knockbackForce: 3
@@ -257,6 +258,12 @@ MonoBehaviour:
   - Type: 6
     Value: 0
   - Type: 7
+    Value: 0
+  - Type: 8
+    Value: 0
+  - Type: 9
+    Value: 0
+  - Type: 10
     Value: 0
   onModifierUpdate:
     m_PersistentCalls:
@@ -317,8 +324,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultAttackType: 0
-  projectilePrefab: {fileID: 0}
-  rangedAttackPoint: {fileID: 0}
+  ProjectilePrefab: {fileID: 0}
+  RangedAttackPoint: {fileID: 0}
   canBeDamaged: 1
   onTakeDamage:
     m_PersistentCalls:
@@ -403,6 +410,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCastTime: 1
+  patrolTime: 0
+  patrolRange: 0
   chargeAttackCastTime: 1
   chargeAttackDelay: 3
 --- !u!1 &5456034626136336738

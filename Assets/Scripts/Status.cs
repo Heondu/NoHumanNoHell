@@ -16,6 +16,9 @@ public enum StatusType
     MeleeAttackDamage,
     MeleeAttackRange,
     MeleeAttackDelay,
+    StrongMeleeAttackDamage,
+    StrongMeleeAttackRange,
+    StrongMeleeAttackDelay,
     RangedAttackDamage,
     RangedAttackRange,
     RangedAttackDelay
