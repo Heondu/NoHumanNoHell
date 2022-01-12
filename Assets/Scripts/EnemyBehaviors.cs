@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    public class Detect : BTNode
+    public class IsDetect : BTNode
     {
         private EnemyAI enemyAI;
 
@@ -15,23 +15,7 @@ namespace BehaviorTree
 
         public override bool Invoke()
         {
-            enemyAI.Detect();
-            return reverse ? false : true;
-        }
-    }
-
-    public class HasTarget : BTNode
-    {
-        private EnemyAI enemyAI;
-
-        public void Init(EnemyAI enemyAI)
-        {
-            this.enemyAI = enemyAI;
-        }
-
-        public override bool Invoke()
-        {
-            return reverse ? !enemyAI.HasTarget() : enemyAI.HasTarget();
+            return reverse ? !enemyAI.IsDetect() : enemyAI.IsDetect();
         }
     }
 
@@ -102,47 +86,51 @@ namespace BehaviorTree
     public class CanAttack : BTNode
     {
         private EnemyAI enemyAI;
+        private string key;
 
         public void Init(EnemyAI enemyAI)
         {
             this.enemyAI = enemyAI;
         }
 
+        public void Init(EnemyAI enemyAI, string key)
+        {
+            this.enemyAI = enemyAI;
+            this.key = key;
+        }
+
         public override bool Invoke()
         {
-            return reverse ? !enemyAI.CanAttack() : enemyAI.CanAttack();
+            if (key == null)
+                return reverse ? !enemyAI.CanAttack() : enemyAI.CanAttack();
+            return reverse ? !enemyAI.CanAttack(key) : enemyAI.CanAttack(key);
         }
     }
 
     public class IsTargetInAttackRange : BTNode
     {
         private EnemyAI enemyAI;
+        private float range;
+        private bool useDefaultRange;
 
         public void Init(EnemyAI enemyAI)
         {
             this.enemyAI = enemyAI;
+            useDefaultRange = true;
+        }
+
+        public void Init(EnemyAI enemyAI, float range)
+        {
+            this.enemyAI = enemyAI;
+            this.range = range;
+            useDefaultRange = false;
         }
 
         public override bool Invoke()
         {
-            bool flag = reverse ? !enemyAI.IsTargetInAttackRange() : enemyAI.IsTargetInAttackRange();
-            return flag;
-        }
-    }
-
-    public class ChargeAttack : BTNode
-    {
-        private BossAI bossAI;
-
-        public void Init(BossAI bossAI)
-        {
-            this.bossAI = bossAI;
-        }
-
-        public override bool Invoke()
-        {
-            bossAI.ChargeAttack();
-            return reverse ? false : true;
+            if (useDefaultRange)
+                return reverse ? !enemyAI.IsTargetInAttackRange() : enemyAI.IsTargetInAttackRange();
+            return reverse ? !enemyAI.IsTargetInAttackRange(range) : enemyAI.IsTargetInAttackRange(range);
         }
     }
 
@@ -205,6 +193,21 @@ namespace BehaviorTree
         {
             enemyAI.FindPatrolPos();
             return reverse ? false : true;
+        }
+    }
+
+    public class IsStop : BTNode
+    {
+        private EnemyAI enemyAI;
+
+        public void Init(EnemyAI enemyAI)
+        {
+            this.enemyAI = enemyAI;
+        }
+
+        public override bool Invoke()
+        {
+            return reverse ? !enemyAI.IsStop : enemyAI.IsStop;
         }
     }
 }

@@ -26,7 +26,7 @@ public class DetectBox : MonoBehaviour
         target = null;
     }
 
-    public Entity GetTarget()
+    public bool IsDetect()
     {
         return target;
     }

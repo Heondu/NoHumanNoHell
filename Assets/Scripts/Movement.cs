@@ -78,12 +78,9 @@ public class Movement : MonoBehaviour
 
     private IEnumerator DashCo(Vector3 force)
     {
-        if (isDash)
-            yield break;
         if (currentDashCount != 0 && !isGrounded)
             yield break;
 
-        isDash = true;
         ++currentDashCount;
         rigidbody2D.velocity = Vector2.zero;
         rigidbody2D.AddForce(force, ForceMode2D.Impulse);
@@ -91,7 +88,6 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
 
         rigidbody2D.velocity = Vector2.zero;
-        isDash = false;
     }
 
     public void DashToLookWeek()

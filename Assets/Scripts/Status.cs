@@ -55,5 +55,6 @@ public class Status : MonoBehaviour
     private void Start()
     {
         CurrentHP = MaxHP;
+        onModifierUpdate.Invoke(this, StatusType.CurrentHP, CurrentHP, CurrentHP);
     }
 }

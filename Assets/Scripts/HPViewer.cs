@@ -16,7 +16,7 @@ public class HPViewer : MonoBehaviour
     [Header("HP Viewer Type")]
     [SerializeField] private HPViewerType type;
 
-    private void Awake()
+    private void Start()
     {
         Setup();
     }
@@ -28,6 +28,7 @@ public class HPViewer : MonoBehaviour
 
     private void UpdateView(Status status, StatusType statusType, float currentValue, float pervValue)
     {
+
         if (statusType == StatusType.CurrentHP)
         {
             float maxValue = status.GetValue(StatusType.MaxHP);

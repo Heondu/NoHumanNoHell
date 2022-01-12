@@ -1,10 +1,7 @@
 using UnityEngine;
 
-public class MeleeAttackBox : MonoBehaviour
+public class MeleeAttackBox : AttackBox
 {
-    [SerializeField] private Entity owner;
-    [SerializeField] LayerMask groundLayer;
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Entity target = collision.GetComponent<Entity>();
@@ -23,22 +20,5 @@ public class MeleeAttackBox : MonoBehaviour
         {
             target.GetComponent<Movement>().Knockback(direction * 3);
         }
-    }
-
-    private bool IsWallBetweenTarget(Transform target)
-    {
-        Vector3 origin = owner.transform.position;
-        Vector3 direction = (target.position - origin).normalized;
-        float distance = Vector3.Distance(origin, target.position);
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, groundLayer);
-        if (hit)
-            return true;
-        else 
-            return false;
-    }
-
-    public Entity GetOwner()
-    {
-        return owner;
     }
 }

@@ -82,51 +82,51 @@ public class Entity : MonoBehaviour
         canBeDamaged = value;
     }
 
-    public bool CanAttack()
+    public bool CanAttack(string key)
     {
-        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.AttackType == AttackType);
+        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.Key == key);
         if (attackTimer == null)
             return true;
         return attackTimer.CanAttack();
     }
 
-    public void SetAttackTimer()
+    public void SetAttackTimer(string key, float delay)
     {
-        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.AttackType == AttackType);
+        AttackTimer attackTimer = attackTimers.FirstOrDefault(x => x.Key == key);
         if (attackTimer == null)
-            AddAttackTimer();
+            AddAttackTimer(key, delay);
         else
-            attackTimer.SetTime();
+            attackTimer.Init();
     }
 
-    private void AddAttackTimer()
+    private void AddAttackTimer(string key, float delay)
     {
         AttackTimer attackTimer = new AttackTimer();
-        attackTimer.Setup(this, AttackType);
-        attackTimer.SetTime();
+        attackTimer.Setup(key, delay);
+        attackTimer.Init();
         attackTimers.Add(attackTimer);
     }
 }
 
 public class AttackTimer
 {
-    private Entity entity;
-    public AttackType AttackType { get; private set; }
+    public string Key { get; private set; }
+    private float delay;
     private float time;
     
-    public void Setup(Entity entity, AttackType attackType)
+    public void Setup(string key, float delay)
     {
-        this.entity = entity;
-        this.AttackType = attackType;
+        Key = key;
+        this.delay = delay;
     }
 
-    public void SetTime()
+    public void Init()
     {
         time = Time.time;
     }
 
     public bool CanAttack()
     {
-        return Time.time - time >= entity.GetAttackDelay(AttackType);
+        return Time.time - time >= delay;
     }
 }

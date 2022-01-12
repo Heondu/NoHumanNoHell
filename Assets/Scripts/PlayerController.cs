@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         entity.AttackType = attackType;
         isInputAttack = true;
 
-        if (entity.CanAttack())
+        if (entity.CanAttack(attackType.ToString()))
             TryAttack();
     }
     
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
         {
             entity.Status.SetValue(StatusType.MeleeAttackDamage, currentComboNode.Damage);
             ++currentComboCount;
-            entity.SetAttackTimer();
+            entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
 
             StopCoroutine("Attack");
             StartCoroutine("Attack");

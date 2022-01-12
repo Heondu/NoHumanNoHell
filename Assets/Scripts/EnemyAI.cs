@@ -21,7 +21,9 @@ public class EnemyAI : MonoBehaviour
     protected CapsuleCollider2D capsuleCollider2D;
 
     protected Entity target;
-    protected bool isAttacking = false;
+    protected bool isAttacking;
+    protected bool isStop = false;
+    public bool IsStop => isStop;
 
     private Vector3 originPos;
     private Vector3 patrolPosition;
@@ -46,6 +48,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
+        target = FindObjectOfType<PlayerController>().GetComponent<Entity>();
         enemyBT.Init(this);
         originPos = transform.position;
     }
@@ -62,14 +65,9 @@ public class EnemyAI : MonoBehaviour
         transform.localScale = localScale;
     }
 
-    public void Detect()
+    public bool IsDetect()
     {
-        target = detectBox.GetTarget();
-    }
-
-    public bool HasTarget()
-    {
-        return target;
+        return detectBox.IsDetect();
     }
 
     public void Idle()
@@ -136,7 +134,7 @@ public class EnemyAI : MonoBehaviour
 
     public void Attack()
     {
-        entity.SetAttackTimer();
+        entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
         StartCoroutine("AttackCo");
     }
 
@@ -151,7 +149,7 @@ public class EnemyAI : MonoBehaviour
         }
         else if (entity.AttackType == AttackType.RangedAttack)
         {
-            if (HasTarget())
+            if (IsDetect())
                 Shoot((target.Position - entity.RangedAttackPoint.position).normalized);
             yield return new WaitForSeconds(entity.Status.GetValue(StatusType.RangedAttackDelay));
         }
@@ -176,13 +174,56 @@ public class EnemyAI : MonoBehaviour
 
     public bool CanAttack()
     {
-        return entity.CanAttack();
+        return CanAttack(entity.AttackType.ToString());
+    }
+
+    public bool CanAttack(string key)
+    {
+        if (isAttacking)
+            return false;
+        return entity.CanAttack(key);
     }
 
     public bool IsTargetInAttackRange()
     {
-        float distance = Vector3.SqrMagnitude(target.transform.position - transform.position);
         float range = entity.AttackType == AttackType.MeleeAttack ? entity.Status.GetValue(StatusType.MeleeAttackRange) : entity.Status.GetValue(StatusType.RangedAttackRange);
+        return IsTargetInAttackRange(range);
+    }
+
+    public bool IsTargetInAttackRange(float range)
+    {
+        float distance = Vector3.SqrMagnitude(target.transform.position - transform.position);
         return distance <= range * range;
+    }
+
+    private void AttackEnd()
+    {
+        isAttacking = false;
+        WaitAttackDelay(entity.Status.GetValue(StatusType.MeleeAttackDelay));
+    }
+
+    protected void WaitAttackDelay(float time)
+    {
+        StopCoroutine("WaitAttackDelayCo");
+        StartCoroutine("WaitAttackDelayCo", time);
+    }
+
+    private IEnumerator WaitAttackDelayCo(float time)
+    {
+        isStop = true;
+        yield return new WaitForSeconds(time);
+        isStop = false;
+    }
+
+    protected void WaitAndPlayAnim(string name, float delay)
+    {
+        WaitAttackDelay(delay);
+        StartCoroutine(WaitAndPlayAnimCo(name, delay));
+    }
+
+    private IEnumerator WaitAndPlayAnimCo(string name, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.Play(name);
     }
 }
