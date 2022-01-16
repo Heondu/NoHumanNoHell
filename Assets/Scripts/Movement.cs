@@ -115,7 +115,7 @@ public class Movement : MonoBehaviour
     private void CheckForGround()
     {
         Bounds bounds = capsuleCollider2D.bounds;
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(bounds.center.x, bounds.min.y), Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(bounds.center.x, bounds.min.y), Vector2.down, 0.4f, groundLayer);
 
         if (hit)
         {

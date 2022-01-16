@@ -67,7 +67,6 @@ public class CowAI : EnemyAI
 
     public void JumpToTarget()
     {
-        LookAtTarget();
         StopCoroutine("JumpAttackCo");
         StartCoroutine("JumpAttackCo");
     }

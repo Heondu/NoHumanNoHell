@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class EnemyProjectile : Projectile
 {
+    private Animator animator;
     private string instigatorTag;
 
     public override void Setup(Vector2 direction, int damage, GameObject instigator)
     {
         base.Setup(direction, damage, instigator);
 
+        animator = GetComponent<Animator>();
         instigatorTag = instigator.tag;
     }
 
@@ -54,7 +56,10 @@ public class EnemyProjectile : Projectile
     {
         Entity targetEntity = collision.GetComponent<Entity>();
         if (targetEntity != null)
+        {
+            animator.Play("Attack");
             targetEntity.TakeDamage(gameObject, damage);
+        }
     }
 
     private void OnBecameVisible()

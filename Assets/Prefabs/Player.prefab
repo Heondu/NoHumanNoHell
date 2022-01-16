@@ -188,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 9ed40cd851451a54fb55600cb66db386, type: 3}
+  m_Sprite: {fileID: -467307283419413426, guid: 91f909b6db1c22d4da34c281acf72392, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -213,7 +213,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.37}
-  m_Size: {x: 0.2, y: 0.74}
+  m_Size: {x: 0.25, y: 0.74}
   m_Direction: 0
 --- !u!50 &4723275675227100526
 Rigidbody2D:
@@ -374,7 +374,7 @@ MonoBehaviour:
   defaultAttackType: 0
   ProjectilePrefab: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
   RangedAttackPoint: {fileID: 1477732196781979270}
-  canBeDamaged: 1
+  canBeDamaged: 0
   onTakeDamage:
     m_PersistentCalls:
       m_Calls:
@@ -418,9 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 4723275675227100524}
-  flashTime: 0.1
-  startColor: {r: 1, g: 0, b: 0, a: 1}
-  endColor: {r: 1, g: 1, b: 1, a: 1}
+  flashTime: 0.15
 --- !u!114 &8809922854046880195
 MonoBehaviour:
   m_ObjectHideFlags: 0

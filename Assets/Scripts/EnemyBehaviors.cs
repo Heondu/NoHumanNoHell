@@ -101,8 +101,6 @@ namespace BehaviorTree
 
         public override bool Invoke()
         {
-            if (key == null)
-                return reverse ? !enemyAI.CanAttack() : enemyAI.CanAttack();
             return reverse ? !enemyAI.CanAttack(key) : enemyAI.CanAttack(key);
         }
     }

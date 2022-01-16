@@ -134,6 +134,7 @@ public class EnemyAI : MonoBehaviour
 
     public void Attack()
     {
+        isAttacking = true;
         entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
         StartCoroutine("AttackCo");
     }
@@ -149,21 +150,17 @@ public class EnemyAI : MonoBehaviour
         }
         else if (entity.AttackType == AttackType.RangedAttack)
         {
-            if (IsDetect())
-                Shoot((target.Position - entity.RangedAttackPoint.position).normalized);
+            animator.Play("Shoot");
             yield return new WaitForSeconds(entity.Status.GetValue(StatusType.RangedAttackDelay));
         }
+        isAttacking = false;
     }
 
-    public void Shoot(Vector3 direction)
-    {
-        Shoot(direction, entity.Status.GetValue(StatusType.RangedAttackDamage));
-    }
-
-    private void Shoot(Vector3 direction, float damage)
+    public void Shoot()
     {
         Projectile clone = Instantiate(entity.ProjectilePrefab, entity.RangedAttackPoint.position, Quaternion.identity).GetComponent<Projectile>();
-        clone.Setup(direction, (int)damage, gameObject);
+        Vector3 direction = (target.Position - entity.RangedAttackPoint.position).normalized;
+        clone.Setup(direction, (int)entity.Status.GetValue(StatusType.RangedAttackDamage), gameObject);
     }
 
     public void LookAtTarget()
@@ -172,15 +169,12 @@ public class EnemyAI : MonoBehaviour
         Look(direction);
     }
 
-    public bool CanAttack()
-    {
-        return CanAttack(entity.AttackType.ToString());
-    }
-
-    public bool CanAttack(string key)
+    public bool CanAttack(string key = "")
     {
         if (isAttacking)
             return false;
+        if (key == "")
+            return CanAttack(entity.AttackType.ToString());
         return entity.CanAttack(key);
     }
 
@@ -197,7 +191,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     private void AttackEnd()
-    {
+    {;
         isAttacking = false;
         WaitAttackDelay(entity.Status.GetValue(StatusType.MeleeAttackDelay));
     }

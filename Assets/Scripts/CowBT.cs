@@ -21,6 +21,7 @@ public class CowBT : MonoBehaviour, IBehaviorTree
     private CanAttack canDefaultAttack = new CanAttack();
     private CanAttack canChargeAttack = new CanAttack();
     private CanAttack canJumpAttack = new CanAttack();
+    private CanAttack canAttack = new CanAttack();
     private IsTargetInAttackRange isTargetInDefaultAttackRange = new IsTargetInAttackRange();
     private IsTargetInAttackRange isTargetInChargeAttackRange = new IsTargetInAttackRange();
     private IsTargetInAttackRange isTargetInJumpAttackRange = new IsTargetInAttackRange();
@@ -60,6 +61,7 @@ public class CowBT : MonoBehaviour, IBehaviorTree
         seqJumpAttack.AddChild(lookAtTarget);
         seqJumpAttack.AddChild(jumpAttack);
 
+        seqChase.AddChild(canAttack);
         seqChase.AddChild(isDetect);
         seqChase.AddChild(chase);
 
@@ -74,6 +76,7 @@ public class CowBT : MonoBehaviour, IBehaviorTree
         canDefaultAttack.Init(enemyAI, "DefaultAttack");
         canChargeAttack.Init(enemyAI, "ChargeAttack");
         canJumpAttack.Init(enemyAI, "JumpAttack");
+        canAttack.Init(enemyAI);
         isTargetInDefaultAttackRange.Init(enemyAI, ((CowAI)enemyAI).DefaultAttackRange);
         isTargetInChargeAttackRange.Init(enemyAI, ((CowAI)enemyAI).ChargeAttackRange);
         isTargetInJumpAttackRange.Init(enemyAI, ((CowAI)enemyAI).JumpAttackRange);
