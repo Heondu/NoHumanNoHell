@@ -1,75 +1,51 @@
-using UnityEngine;
-using BehaviorTree;
+using BT;
 
-public class EnemyBT : MonoBehaviour, IBehaviorTree
+public class EnemyBT : BehaviorTree
 {
     private Sequence root = new Sequence();
     private Selector selector = new Selector();
-    private Sequence seqAttack = new Sequence();
-    private Sequence seqChase = new Sequence();
-    private Sequence seqPatrol = new Sequence();
-    private Sequence seqIdle = new Sequence();
+    private Selector selectorPatrol = new Selector();
+    private Sequence sequenceAttack = new Sequence();
+    private Sequence sequenceChase = new Sequence();
+    private Sequence sequencePatrol = new Sequence();
+    private Sequence sequenceFindPatrolPos = new Sequence();
+    private Sequence sequenceIdle = new Sequence();
 
-    private IsDetect isDetect = new IsDetect();
-    private IsDetect isNotDetect = new IsDetect();
-    private Attack attack = new Attack();
-    private CanAttack canAttack = new CanAttack();
-    private IsTargetInAttackRange isTargetInMeleeRange = new IsTargetInAttackRange();
-    private IsTargetInAttackRange isNotTargetInMeleeRange = new IsTargetInAttackRange();
-    private LookAtTarget lookAtTarget = new LookAtTarget();
-    private Chase chase = new Chase();
-    private Patrol patrol = new Patrol();
-    private Idle idle = new Idle();
-    private IsClosePatrolPos isNotClosePatrolPos = new IsClosePatrolPos();
-    private IsReachablePos isReachablePos = new IsReachablePos();
-    private FindPatrolPos findPatrolPos = new FindPatrolPos();
-
-    public void Init(EnemyAI enemyAI)
+    public override void Init(EnemyAI enemyAI)
     {
         root.AddChild(selector);
+        
+        selector.AddChild(sequenceAttack);
+        selector.AddChild(sequenceChase);
+        selector.AddChild(selectorPatrol);
+        selector.AddChild(sequenceIdle);
 
-        selector.AddChild(seqAttack);
-        selector.AddChild(seqChase);
-        selector.AddChild(seqPatrol);
-        selector.AddChild(seqIdle);
+        selectorPatrol.AddChild(sequenceFindPatrolPos);
+        selectorPatrol.AddChild(sequencePatrol);
+        
+        sequenceAttack.AddChild(new IsDetect(enemyAI));
+        sequenceAttack.AddChild(new IsTargetInAttackRange(enemyAI));
+        sequenceAttack.AddChild(new CanAttack(enemyAI));
+        sequenceAttack.AddChild(new LookAtTarget(enemyAI));
+        sequenceAttack.AddChild(new Attack(enemyAI));
+        
+        sequenceChase.AddChild(new IsDetect(enemyAI));
+        sequenceChase.AddChild(new IsTargetInAttackRange(enemyAI, true));
+        sequenceChase.AddChild(new LookAtMoveDirection(enemyAI));
+        sequenceChase.AddChild(new Chase(enemyAI));
+        
+        sequenceFindPatrolPos.AddChild(new Patrol(enemyAI));
+        sequenceFindPatrolPos.AddChild(new FindPatrolPos(enemyAI));
 
-        seqAttack.AddChild(isDetect);
-        seqAttack.AddChild(isTargetInMeleeRange);
-        seqAttack.AddChild(canAttack);
-        seqAttack.AddChild(lookAtTarget);
-        seqAttack.AddChild(attack);
-
-        seqChase.AddChild(isDetect);
-        seqChase.AddChild(isNotTargetInMeleeRange);
-        seqChase.AddChild(chase);
-
-        seqPatrol.AddChild(isNotDetect);
-        seqPatrol.AddChild(findPatrolPos);
-        seqPatrol.AddChild(isReachablePos);
-        seqPatrol.AddChild(isNotClosePatrolPos);
-        seqPatrol.AddChild(patrol);
-
-        seqIdle.AddChild(idle);
-
-        isDetect.Init(enemyAI);
-        isNotDetect.Init(enemyAI);
-        isNotDetect.reverse = true;
-        attack.Init(enemyAI);
-        canAttack.Init(enemyAI);
-        isTargetInMeleeRange.Init(enemyAI);
-        isNotTargetInMeleeRange.Init(enemyAI);
-        isNotTargetInMeleeRange.reverse = true;
-        lookAtTarget.Init(enemyAI);
-        chase.Init(enemyAI);
-        patrol.Init(enemyAI);
-        idle.Init(enemyAI);
-        isNotClosePatrolPos.Init(enemyAI);
-        isNotClosePatrolPos.reverse = true;
-        isReachablePos.Init(enemyAI);
-        findPatrolPos.Init(enemyAI);
+        sequencePatrol.AddChild(new IsDetect(enemyAI, true));
+        sequencePatrol.AddChild(new IsReachablePos(enemyAI));
+        sequencePatrol.AddChild(new LookAtMoveDirection(enemyAI));
+        sequencePatrol.AddChild(new MoveToPosition(enemyAI));
+        
+        sequenceIdle.AddChild(new Idle(enemyAI));
     }
 
-    public void BTUpdate()
+    public override void BTUpdate()
     {
         root.Invoke();
     }

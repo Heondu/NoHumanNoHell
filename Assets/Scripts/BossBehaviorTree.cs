@@ -2,53 +2,128 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+namespace BT
 {
     public class DefaultAttack : BTNode
     {
-        private CowAI cowAI;
+        private CowAI self;
 
-        public void Init(CowAI cowAI)
+        public DefaultAttack(EnemyAI self)
         {
-            this.cowAI = cowAI;
+            this.self = (CowAI)self;
         }
 
         public override bool Invoke()
         {
-            cowAI.DefaultAttack();
-            return reverse ? false : true;
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("DefaultAttack", self.defaultAttackCooldown);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.defaultAttackDamage);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.defaultAttackStopTime);
+            self.GetComponent<Animator>().Play("DefaultAttack_Prepare");
+            self.WaitAndPlayAnim("DefaultAttack", self.defaultAttackPrepareTime);
+            
+            return true;
         }
     }
 
     public class ChargeAttack : BTNode
     {
-        private CowAI cowAI;
+        private CowAI self;
 
-        public void Init(CowAI cowAI)
+        public ChargeAttack(EnemyAI self)
         {
-            this.cowAI = cowAI;
+            this.self = (CowAI)self;
         }
 
         public override bool Invoke()
         {
-            cowAI.ChargeAttack();
-            return reverse ? false : true;
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("ChargeAttack", self.chargeAttackCooldown);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.chargeAttackDamage);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.chargeAttackStopTime);
+            self.GetComponent<Animator>().Play("ChargeAttack_Prepare");
+            self.WaitAndPlayAnim("ChargeAttack", self.chargeAttackPrepareTime);
+
+            return true;
         }
     }
 
     public class JumpAttack : BTNode
     {
-        private CowAI cowAI;
+        private CowAI self;
 
-        public void Init(CowAI cowAI)
+        public JumpAttack(EnemyAI self)
         {
-            this.cowAI = cowAI;
+            this.self = (CowAI)self;
         }
 
         public override bool Invoke()
         {
-            cowAI.JumpAttack();
-            return reverse ? false : true;
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("JumpAttack", self.jumpAttackCooldown);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.jumpAttackDamage);
+            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.jumpAttackStopTime);
+            self.GetComponent<Animator>().Play("JumpAttack_Prepare");
+            self.WaitAndPlayAnim("JumpAttack", self.jumpAttackPrepareTime);
+
+            return true;
+        }
+    }
+
+    public class BosalFirstAttack : BTNode
+    {
+        private BosalAI self;
+
+        public BosalFirstAttack(EnemyAI self)
+        {
+            this.self = (BosalAI)self;
+        }
+
+        public override bool Invoke()
+        {
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("FirstAttack", self.firstAttackCooldown);
+            self.FirstAttack();
+
+            return true;
+        }
+    }
+
+    public class BosalSecondAttack : BTNode
+    {
+        private BosalAI self;
+
+        public BosalSecondAttack(EnemyAI self)
+        {
+            this.self = (BosalAI)self;
+        }
+
+        public override bool Invoke()
+        {
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("SecondAttack", self.secondAttackCooldown);
+            self.SecondAttack();
+
+            return true;
+        }
+    }
+
+    public class BosalThirdAttack : BTNode
+    {
+        private BosalAI self;
+
+        public BosalThirdAttack(EnemyAI self)
+        {
+            this.self = (BosalAI)self;
+        }
+
+        public override bool Invoke()
+        {
+            self.IsAttacking = true;
+            self.Entity.SetAttackTimer("ThirdAttack", self.thirdAttackCooldown);
+            self.ThirdAttack();
+
+            return true;
         }
     }
 }

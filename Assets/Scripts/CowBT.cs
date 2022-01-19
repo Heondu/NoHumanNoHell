@@ -1,91 +1,57 @@
-using BehaviorTree;
-using UnityEngine;
+using BT;
 
-public class CowBT : MonoBehaviour, IBehaviorTree
+public class CowBT : BehaviorTree
 {
     private Sequence root = new Sequence();
     private Selector selector = new Selector();
     private Selector selectorAttack = new Selector();
-    private Sequence seqAttack = new Sequence();
-    private Sequence seqDefaultAttack = new Sequence();
-    private Sequence seqChargeAttack = new Sequence();
-    private Sequence seqJumpAttack = new Sequence();
-    private Sequence seqChase = new Sequence();
-    private Sequence seqIdle = new Sequence();
+    private Sequence sequenceAttack = new Sequence();
+    private Sequence sequenceDefaultAttack = new Sequence();
+    private Sequence sequenceChargeAttack = new Sequence();
+    private Sequence sequenceJumpAttack = new Sequence();
+    private Sequence sequenceChase = new Sequence();
+    private Sequence sequenceIdle = new Sequence();
 
-    private IsStop isNotStop = new IsStop();
-    private IsDetect isDetect = new IsDetect();
-    private DefaultAttack defaultAttack = new DefaultAttack();
-    private ChargeAttack chargeAttack = new ChargeAttack();
-    private JumpAttack jumpAttack = new JumpAttack();
-    private CanAttack canDefaultAttack = new CanAttack();
-    private CanAttack canChargeAttack = new CanAttack();
-    private CanAttack canJumpAttack = new CanAttack();
-    private CanAttack canAttack = new CanAttack();
-    private IsTargetInAttackRange isTargetInDefaultAttackRange = new IsTargetInAttackRange();
-    private IsTargetInAttackRange isTargetInChargeAttackRange = new IsTargetInAttackRange();
-    private IsTargetInAttackRange isTargetInJumpAttackRange = new IsTargetInAttackRange();
-    private LookAtTarget lookAtTarget = new LookAtTarget();
-    private Chase chase = new Chase();
-    private Idle idle = new Idle();
-
-    public void Init(EnemyAI enemyAI)
+    public override void Init(EnemyAI enemyAI)
     {
-        root.AddChild(isNotStop);
+        root.AddChild(new IsStop(enemyAI, true));
         root.AddChild(selector);
-
-        selector.AddChild(seqAttack);
-
-        seqAttack.AddChild(isDetect);
-        seqAttack.AddChild(selectorAttack);
         
-        selectorAttack.AddChild(seqDefaultAttack);
-        selectorAttack.AddChild(seqChargeAttack);
-        selectorAttack.AddChild(seqJumpAttack);
+        selector.AddChild(sequenceAttack);
         
-        selector.AddChild(seqChase);
-        selector.AddChild(seqIdle);
-
-        seqDefaultAttack.AddChild(isTargetInDefaultAttackRange);
-        seqDefaultAttack.AddChild(canDefaultAttack);
-        seqDefaultAttack.AddChild(lookAtTarget);
-        seqDefaultAttack.AddChild(defaultAttack);
-
-        seqChargeAttack.AddChild(isTargetInChargeAttackRange);
-        seqChargeAttack.AddChild(canChargeAttack);
-        seqChargeAttack.AddChild(lookAtTarget);
-        seqChargeAttack.AddChild(chargeAttack);
-
-        seqJumpAttack.AddChild(isTargetInJumpAttackRange);
-        seqJumpAttack.AddChild(canJumpAttack);
-        seqJumpAttack.AddChild(lookAtTarget);
-        seqJumpAttack.AddChild(jumpAttack);
-
-        seqChase.AddChild(canAttack);
-        seqChase.AddChild(isDetect);
-        seqChase.AddChild(chase);
-
-        seqIdle.AddChild(idle);
-
-        isNotStop.Init(enemyAI);
-        isNotStop.reverse = true;
-        isDetect.Init(enemyAI);
-        defaultAttack.Init((CowAI)enemyAI);
-        chargeAttack.Init((CowAI)enemyAI);
-        jumpAttack.Init((CowAI)enemyAI);
-        canDefaultAttack.Init(enemyAI, "DefaultAttack");
-        canChargeAttack.Init(enemyAI, "ChargeAttack");
-        canJumpAttack.Init(enemyAI, "JumpAttack");
-        canAttack.Init(enemyAI);
-        isTargetInDefaultAttackRange.Init(enemyAI, ((CowAI)enemyAI).DefaultAttackRange);
-        isTargetInChargeAttackRange.Init(enemyAI, ((CowAI)enemyAI).ChargeAttackRange);
-        isTargetInJumpAttackRange.Init(enemyAI, ((CowAI)enemyAI).JumpAttackRange);
-        lookAtTarget.Init(enemyAI);
-        chase.Init(enemyAI);
-        idle.Init(enemyAI);
+        sequenceAttack.AddChild(new IsDetect(enemyAI));
+        sequenceAttack.AddChild(selectorAttack);
+        
+        selectorAttack.AddChild(sequenceDefaultAttack);
+        selectorAttack.AddChild(sequenceChargeAttack);
+        selectorAttack.AddChild(sequenceJumpAttack);
+        
+        selector.AddChild(sequenceChase);
+        selector.AddChild(sequenceIdle);
+        
+        sequenceDefaultAttack.AddChild(new IsTargetInAttackRange(enemyAI, ((CowAI)enemyAI).defaultAttackRange));
+        sequenceDefaultAttack.AddChild(new CanAttack(enemyAI, "DefaultAttack"));
+        sequenceDefaultAttack.AddChild(new LookAtTarget(enemyAI));
+        sequenceDefaultAttack.AddChild(new DefaultAttack(enemyAI));
+        
+        sequenceChargeAttack.AddChild(new IsTargetInAttackRange(enemyAI, ((CowAI)enemyAI).chargeAttackRange));
+        sequenceChargeAttack.AddChild(new CanAttack(enemyAI, "ChargeAttack"));
+        sequenceChargeAttack.AddChild(new LookAtTarget(enemyAI));
+        sequenceChargeAttack.AddChild(new ChargeAttack(enemyAI));
+        
+        sequenceJumpAttack.AddChild(new IsTargetInAttackRange(enemyAI, ((CowAI)enemyAI).jumpAttackRange));
+        sequenceJumpAttack.AddChild(new CanAttack(enemyAI, "JumpAttack"));
+        sequenceJumpAttack.AddChild(new LookAtTarget(enemyAI));
+        sequenceJumpAttack.AddChild(new JumpAttack(enemyAI));
+        
+        sequenceChase.AddChild(new CanAttack(enemyAI));
+        sequenceChase.AddChild(new IsDetect(enemyAI));
+        sequenceChase.AddChild(new Chase(enemyAI));
+        
+        sequenceIdle.AddChild(new Idle(enemyAI));
     }
 
-    public void BTUpdate()
+    public override void BTUpdate()
     {
         root.Invoke();
     }

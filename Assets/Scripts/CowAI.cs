@@ -4,65 +4,32 @@ using UnityEngine;
 public class CowAI : EnemyAI
 {
     [Header("Default Attack")]
-    [SerializeField] private float defaultAttackDamage;
-    [SerializeField] private float defaultAttackRange;
-    [SerializeField] private float defaultAttackPrepareTime;
-    [SerializeField] private float defaultAttackStopTime;
-    [SerializeField] private float defaultAttackCooldown;
+    public float defaultAttackDamage;
+    public float defaultAttackRange;
+    public float defaultAttackPrepareTime;
+    public float defaultAttackStopTime;
+    public float defaultAttackCooldown;
     [Header("Charge Attack")]
-    [SerializeField] private float chargeAttackDamage;
-    [SerializeField] private float chargeAttackRange;
-    [SerializeField] private float chargeAttackPrepareTime;
-    [SerializeField] private float chargeAttackStopTime;
-    [SerializeField] private float chargeAttackCooldown;
+    public float chargeAttackDamage;
+    public float chargeAttackRange;
+    public float chargeAttackPrepareTime;
+    public float chargeAttackStopTime;
+    public float chargeAttackCooldown;
     [Header("Jump Attack")]
-    [SerializeField] private float jumpAttackDamage;
-    [SerializeField] private float jumpAttackRange;
-    [SerializeField] private float jumpAttackPrepareTime;
-    [SerializeField] private float jumpAttackStopTime;
-    [SerializeField] private float jumpAttackCooldown;
-    [SerializeField] private float jumpAttackForce;
+    public float jumpAttackDamage;
+    public float jumpAttackRange;
+    public float jumpAttackPrepareTime;
+    public float jumpAttackStopTime;
+    public float jumpAttackCooldown;
+    public float jumpAttackForce;
     [SerializeField] private AnimationCurve jumpAttackCurve;
 
-    public float DefaultAttackRange => defaultAttackRange;
-    public float ChargeAttackRange => chargeAttackRange;
-    public float JumpAttackRange => jumpAttackRange;
-
-    public void DefaultAttack()
-    {
-        isAttacking = true;
-        entity.SetAttackTimer("DefaultAttack", defaultAttackCooldown);
-        entity.Status.SetValue(StatusType.MeleeAttackDamage, defaultAttackDamage);
-        entity.Status.SetValue(StatusType.MeleeAttackDelay, defaultAttackStopTime);
-        animator.Play("DefaultAttack_Prepare");
-        WaitAndPlayAnim("DefaultAttack", defaultAttackPrepareTime);
-    }
-
-    public void ChargeAttack()
-    {
-        isAttacking = true;
-        entity.SetAttackTimer("ChargeAttack", chargeAttackCooldown);
-        entity.Status.SetValue(StatusType.MeleeAttackDamage, chargeAttackDamage);
-        entity.Status.SetValue(StatusType.MeleeAttackDelay, chargeAttackStopTime);
-        animator.Play("ChargeAttack_Prepare");
-        WaitAndPlayAnim("ChargeAttack", chargeAttackPrepareTime);
-    }
 
     public void DashToTarget()
     {
         LookAtTarget();
         Vector3 direction = new Vector3(Mathf.Sign(target.Position.x - entity.Position.x), 0, 0);
         movement.Dash(direction);
-    }
-
-    public void JumpAttack()
-    {
-        isAttacking = true;
-        entity.SetAttackTimer("JumpAttack", jumpAttackCooldown);
-        entity.Status.SetValue(StatusType.MeleeAttackDamage, jumpAttackDamage);
-        entity.Status.SetValue(StatusType.MeleeAttackDelay, jumpAttackStopTime);
-        animator.Play("JumpAttack_Prepare");
-        WaitAndPlayAnim("JumpAttack", jumpAttackPrepareTime);
     }
 
     public void JumpToTarget()

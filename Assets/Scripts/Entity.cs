@@ -10,7 +10,7 @@ public enum AttackType
     RangedAttack
 }
 
-[RequireComponent(typeof(Status), typeof(Movement))]
+[RequireComponent(typeof(Status))]
 public class Entity : MonoBehaviour
 {
     [SerializeField] private AttackType defaultAttackType;
@@ -53,7 +53,8 @@ public class Entity : MonoBehaviour
 
         Status.CurrentHP -= damage;
 
-        movement.Knockback((transform.position - instigator.transform.position).normalized);
+        if (movement != null)
+            movement.Knockback((transform.position - instigator.transform.position).normalized);
 
         onTakeDamage.Invoke(this, damage);
 

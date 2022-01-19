@@ -888,9 +888,9 @@ MonoBehaviour:
   m_RefResolutionY: 720
   m_UpscaleRT: 0
   m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
+  m_CropFrameX: 1
+  m_CropFrameY: 1
+  m_StretchFill: 1
 --- !u!114 &340463527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3719,7 +3719,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3483901836095405100, guid: fdc092cb811b18d4a8228a97d4f00051, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3483901836095405103, guid: fdc092cb811b18d4a8228a97d4f00051, type: 3}
       propertyPath: m_RootOrder

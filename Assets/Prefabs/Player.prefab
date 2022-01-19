@@ -374,7 +374,7 @@ MonoBehaviour:
   defaultAttackType: 0
   ProjectilePrefab: {fileID: 3883819342755450107, guid: 556cea7697f9e7e46b81cf80144b416e, type: 3}
   RangedAttackPoint: {fileID: 1477732196781979270}
-  canBeDamaged: 0
+  canBeDamaged: 1
   onTakeDamage:
     m_PersistentCalls:
       m_Calls:

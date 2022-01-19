@@ -16,20 +16,23 @@ public class EnemyAI : MonoBehaviour
     protected Entity entity;
     protected Movement movement;
     protected Animator animator;
-    protected IBehaviorTree enemyBT;
-    protected DetectBox detectBox;
-    protected CapsuleCollider2D capsuleCollider2D;
+    protected BehaviorTree behaviorTree;
 
     protected Entity target;
-    protected bool isAttacking;
+    [HideInInspector] public bool IsAttacking;
     protected bool isStop = false;
-    public bool IsStop => isStop;
 
     private Vector3 originPos;
-    private Vector3 patrolPosition;
+    [HideInInspector] public Vector3 MovePosition;
     [SerializeField] private float patrolTime;
     [SerializeField] private float patrolRange;
-    private bool isPatrol;
+
+    public Entity Entity => entity;
+    public Entity Target => target;
+    public bool IsStop => isStop;
+    public Vector3 OriginPos => originPos;
+    public float PatrolTime => patrolTime;
+    public float PatrolRange => patrolRange;
 
     private void Awake()
     {
@@ -41,21 +44,19 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         entity = GetComponent<Entity>();
         movement = GetComponent<Movement>();
-        enemyBT = GetComponent<IBehaviorTree>();
-        detectBox = GetComponentInChildren<DetectBox>();
-        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        behaviorTree = GetComponent<BehaviorTree>();
     }
 
     private void Start()
     {
         target = FindObjectOfType<PlayerController>().GetComponent<Entity>();
-        enemyBT.Init(this);
+        behaviorTree.Init(this);
         originPos = transform.position;
     }
 
     private void Update()
     {
-        enemyBT.BTUpdate();
+        behaviorTree.BTUpdate();
     }
 
     protected void Look(Vector3 direction)
@@ -65,76 +66,9 @@ public class EnemyAI : MonoBehaviour
         transform.localScale = localScale;
     }
 
-    public bool IsDetect()
-    {
-        return detectBox.IsDetect();
-    }
-
-    public void Idle()
-    {
-        movement.Move(Vector3.zero);
-    }
-
-    public void Patrol()
-    {
-        if (!isPatrol)
-            StartCoroutine("PatrolCo");
-
-        Vector3 direction = (patrolPosition - transform.position).normalized;
-        movement.Move(direction);
-        Look(direction);
-    }
-
-    public bool IsClosePatolPos()
-    {
-        return (Vector3.SqrMagnitude(patrolPosition - transform.position) < 0.5f);
-    }
-
-    public bool IsReachablePos()
-    {
-        Vector3 direction = (patrolPosition - transform.position).normalized;
-
-        LayerMask EnemyLayer = 1 << LayerMask.NameToLayer("Enemy");
-        LayerMask groundLayer = 1 << LayerMask.NameToLayer("Ground");
-
-        RaycastHit2D[] hits = Physics2D.RaycastAll(capsuleCollider2D.bounds.center, direction, 0.5f, EnemyLayer + groundLayer);
-        foreach (RaycastHit2D hit in hits)
-            if (hit.collider.gameObject != gameObject)
-                return false;
-
-        RaycastHit2D hitGround = Physics2D.Raycast(transform.position + direction * 0.5f, Vector2.down, 0.1f, groundLayer);
-        if (!hitGround)
-            return false;
-
-        return true;
-    }
-
-    public void FindPatrolPos()
-    {
-        if (!isPatrol)
-            patrolPosition = new Vector3(Random.Range(originPos.x - patrolRange, originPos.x + patrolRange), originPos.y, originPos.z);
-    }
-
-    private IEnumerator PatrolCo()
-    {
-        isPatrol = true;
-
-        yield return new WaitForSeconds(patrolTime);
-
-        isPatrol = false;
-    }
-
-    public void Chase()
-    {
-        Vector3 direction = (target.transform.position - transform.position).normalized;
-        direction.y = 0;
-        movement.Move(direction);
-        Look(direction);
-    }
-
     public void Attack()
     {
-        isAttacking = true;
+        IsAttacking = true;
         entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
         StartCoroutine("AttackCo");
     }
@@ -153,7 +87,7 @@ public class EnemyAI : MonoBehaviour
             animator.Play("Shoot");
             yield return new WaitForSeconds(entity.Status.GetValue(StatusType.RangedAttackDelay));
         }
-        isAttacking = false;
+        IsAttacking = false;
     }
 
     public void Shoot()
@@ -169,30 +103,9 @@ public class EnemyAI : MonoBehaviour
         Look(direction);
     }
 
-    public bool CanAttack(string key = "")
-    {
-        if (isAttacking)
-            return false;
-        if (key == "")
-            return CanAttack(entity.AttackType.ToString());
-        return entity.CanAttack(key);
-    }
-
-    public bool IsTargetInAttackRange()
-    {
-        float range = entity.AttackType == AttackType.MeleeAttack ? entity.Status.GetValue(StatusType.MeleeAttackRange) : entity.Status.GetValue(StatusType.RangedAttackRange);
-        return IsTargetInAttackRange(range);
-    }
-
-    public bool IsTargetInAttackRange(float range)
-    {
-        float distance = Vector3.SqrMagnitude(target.transform.position - transform.position);
-        return distance <= range * range;
-    }
-
     private void AttackEnd()
     {;
-        isAttacking = false;
+        IsAttacking = false;
         WaitAttackDelay(entity.Status.GetValue(StatusType.MeleeAttackDelay));
     }
 
@@ -209,7 +122,7 @@ public class EnemyAI : MonoBehaviour
         isStop = false;
     }
 
-    protected void WaitAndPlayAnim(string name, float delay)
+    public void WaitAndPlayAnim(string name, float delay)
     {
         WaitAttackDelay(delay);
         StartCoroutine(WaitAndPlayAnimCo(name, delay));

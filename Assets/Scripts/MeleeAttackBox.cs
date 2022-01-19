@@ -14,11 +14,15 @@ public class MeleeAttackBox : AttackBox
         Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;
         if (owner.AttackType == AttackType.MeleeAttack)
         {
-            target.GetComponent<Movement>().Knockback(direction);
+            Movement movement = target.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback(direction);
         }
         if (owner.AttackType == AttackType.StrongMeleeAttack)
         {
-            target.GetComponent<Movement>().Knockback(direction * 3);
+            Movement movement = target.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback(direction * 3);
         }
     }
 }
