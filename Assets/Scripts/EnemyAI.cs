@@ -47,7 +47,7 @@ public class EnemyAI : MonoBehaviour
         behaviorTree = GetComponent<BehaviorTree>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         target = FindObjectOfType<PlayerController>().GetComponent<Entity>();
         behaviorTree.Init(this);

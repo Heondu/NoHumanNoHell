@@ -24,7 +24,6 @@ public class CowAI : EnemyAI
     public float jumpAttackForce;
     [SerializeField] private AnimationCurve jumpAttackCurve;
 
-
     public void DashToTarget()
     {
         LookAtTarget();

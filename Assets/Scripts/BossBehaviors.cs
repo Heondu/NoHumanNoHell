@@ -126,4 +126,39 @@ namespace BT
             return true;
         }
     }
+
+    public class BosalRandomAttack : BTNode
+    {
+        private BosalAI self;
+
+        public BosalRandomAttack(EnemyAI self)
+        {
+            this.self = (BosalAI)self;
+        }
+
+        public override bool Invoke()
+        {
+            if (self.IsAttacking)
+                return false;
+
+            int rand = Random.Range(0, 3);
+            if (rand == 0)
+            {
+                if (self.Entity.CanAttack("FirstAttack"))
+                    self.FirstAttack();
+            }
+            else if (rand == 1)
+            {
+                if (self.Entity.CanAttack("SecondAttack"))
+                    self.SecondAttack();
+            }
+            else if (rand == 2)
+            {
+                if (self.Entity.CanAttack("ThirdAttack"))
+                    self.ThirdAttack();
+            }
+
+            return true;
+        }
+    }
 }

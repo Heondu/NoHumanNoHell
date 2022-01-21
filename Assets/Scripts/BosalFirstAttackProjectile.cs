@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BosalFood : MonoBehaviour
+public class BosalFirstAttackProjectile : MonoBehaviour
 {
+    [SerializeField] private float warningTime;
+    [SerializeField] private float delay;
     [SerializeField] private float castTime;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject attackMaker;
 
     private int damage;
     private GameObject instigator;
-    
+
     public void Setup(int damage, GameObject instigator)
     {
         this.damage = damage;
         this.instigator = instigator;
+        GetComponent<SpriteRenderer>().flipX = Random.Range(0, 2) == 0 ? true : false;
 
         StartCoroutine("Attack");
     }
+
 
     private IEnumerator Attack()
     {
@@ -28,6 +33,15 @@ public class BosalFood : MonoBehaviour
         }
 
         Vector3 newPos = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+        attackMaker.transform.position = newPos;
+        attackMaker.SetActive(true);
+
+        yield return new WaitForSeconds(warningTime);
+
+        attackMaker.SetActive(false);
+
+        yield return new WaitForSeconds(delay);
+
         Vector3 originPos = transform.position;
         float current = 0;
         while (current < castTime)
@@ -37,7 +51,7 @@ public class BosalFood : MonoBehaviour
             yield return null;
         }
 
-        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
         Destroy(gameObject, 1f);
     }
 
@@ -46,7 +60,7 @@ public class BosalFood : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             collision.GetComponent<Entity>().TakeDamage(instigator, damage);
-            GetComponent<CircleCollider2D>().enabled = false;
+            GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 }

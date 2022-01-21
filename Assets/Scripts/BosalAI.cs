@@ -8,7 +8,7 @@ public class BosalAI : EnemyAI
     public float firstAttackDamage;
     public float firstAttackPrepareTime;
     public float firstAttackCooldown;
-    public BosalHandAndFoot firstAttackProjectile;
+    public BosalFirstAttackProjectile[] firstAttackProjectiles;
     public float firstAttackYOffset;
     public int firstAttackNum;
     public float firstAttackDelay;
@@ -17,22 +17,38 @@ public class BosalAI : EnemyAI
     public float secondAttackDamage;
     public float secondAttackPrepareTime;
     public float secondAttackCooldown;
-    public BosalHorizontalHand secondAttackProjectile;
+    public BosalSecondAttackProjectile secondAttackProjectile;
     public float secondAttackYOffset;
     [Header("Third Attack")]
     public float thirdAttackDamage;
     public float thirdAttackPrepareTime;
     public float thirdAttackCooldown;
-    public BosalFood thirdAttackProjectile;
+    public BosalThirdAttackProjectile[] thirdAttackProjectiles;
     public float thirdAttackYOffset;
     public int thirdAttackNum;
-    public float thirdAttackDelay;
     public float thirdAttackSpawnRange;
     public float thirdAttackDuration;
 
+    protected override void Start()
+    {
+        base.Start();
+        StartCoroutine("StartAttack");
+    }
+
+    private IEnumerator StartAttack()
+    {
+        IsAttacking = true;
+
+        yield return new WaitForSeconds(1f);
+
+        IsAttacking = false;
+    }
+
     public void FirstAttack()
     {
-        StartCoroutine("FirstAttackCo");
+        IsAttacking = true;
+        entity.SetAttackTimer("FirstAttack", firstAttackCooldown);
+        animator.Play("FirstAttack");
     }
 
     private IEnumerator FirstAttackCo()
@@ -46,27 +62,41 @@ public class BosalAI : EnemyAI
             yield return new WaitForSeconds(firstAttackDelay);
         }
 
+        yield return new WaitForSeconds(2);
+
         IsAttacking = false;
     }
 
     private void SpawnHandAndFoot()
     {
         float x = Random.Range(Target.Position.x - firstAttackSpawnRange, Target.Position.x + firstAttackSpawnRange);
-        BosalHandAndFoot clone = Instantiate(firstAttackProjectile, new Vector2(x, firstAttackYOffset), Quaternion.identity);
+        BosalFirstAttackProjectile spawnObject = firstAttackProjectiles[Random.Range(0, firstAttackProjectiles.Length)];
+        BosalFirstAttackProjectile clone = Instantiate(spawnObject, new Vector2(x, firstAttackYOffset), Quaternion.identity);
         clone.Setup((int)firstAttackDamage, gameObject);
     }
 
     public void SecondAttack()
     {
-        BosalHorizontalHand clone = Instantiate(secondAttackProjectile, new Vector2(Target.Position.x, secondAttackYOffset), Quaternion.identity);
+        IsAttacking = true;
+        entity.SetAttackTimer("SecondAttack", secondAttackCooldown);
+        animator.Play("SecondAttack");
+    }
+
+    private IEnumerator SecondAttackCo()
+    {
+        BosalSecondAttackProjectile clone = Instantiate(secondAttackProjectile, new Vector2(Target.Position.x, secondAttackYOffset), Quaternion.identity);
         clone.Setup((int)secondAttackDamage, gameObject, Target.transform);
+
+        yield return new WaitForSeconds(3);
 
         IsAttacking = false;
     }
 
     public void ThirdAttack()
     {
-        StartCoroutine("ThirdAttackCo");
+        IsAttacking = true;
+        entity.SetAttackTimer("ThirdAttack", thirdAttackCooldown);
+        animator.Play("ThirdAttack");
     }
 
     private IEnumerator ThirdAttackCo()
@@ -74,10 +104,13 @@ public class BosalAI : EnemyAI
         float current = 0;
         while (current < thirdAttackDuration)
         {
-            current += thirdAttackDelay;
+            float delay = thirdAttackDuration / thirdAttackNum;
+            current += delay;
             SpawnFood();
-            yield return new WaitForSeconds(thirdAttackDelay);
+            yield return new WaitForSeconds(delay);
         }
+
+        yield return new WaitForSeconds(2);
 
         IsAttacking = false;
     }
@@ -85,7 +118,8 @@ public class BosalAI : EnemyAI
     private void SpawnFood()
     {
         float x = Random.Range(Target.Position.x - thirdAttackSpawnRange, Target.Position.x + thirdAttackSpawnRange);
-        BosalFood clone = Instantiate(thirdAttackProjectile, new Vector2(x, thirdAttackYOffset), Quaternion.identity);
+        BosalThirdAttackProjectile spawnObject = thirdAttackProjectiles[Random.Range(0, thirdAttackProjectiles.Length)];
+        BosalThirdAttackProjectile clone = Instantiate(spawnObject, new Vector2(x, thirdAttackYOffset), Quaternion.identity);
         clone.Setup((int)thirdAttackDamage, gameObject);
     }
 }

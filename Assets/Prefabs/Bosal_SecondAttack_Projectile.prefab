@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1245165329336836366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6850047730542554853}
   m_RootOrder: 0
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -72554957
   m_SortingLayer: -1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 23e42088e7006744b9ec8f6836df01e6, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: daf2fb3db8e7c3043b23aa9eee13c07e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,18 +96,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.25, y: 0}
+  m_Offset: {x: -0.25, y: 0.05}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 1, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    pivot: {x: 0.46, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.5, y: 1.9}
   m_EdgeRadius: 0
 --- !u!1 &6648176795879276551
 GameObject:
@@ -136,7 +136,7 @@ Transform:
   m_GameObject: {fileID: 6648176795879276551}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6850047730542554853}
   m_RootOrder: 1
@@ -181,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: -72554957
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 23e42088e7006744b9ec8f6836df01e6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: daf2fb3db8e7c3043b23aa9eee13c07e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -205,18 +205,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.25, y: 0}
+  m_Offset: {x: 0.25, y: 0.05}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 1, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    pivot: {x: 0.46, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.5, y: 1.9}
   m_EdgeRadius: 0
 --- !u!1 &7832978668110859756
 GameObject:
@@ -227,10 +227,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6850047730542554853}
-  - component: {fileID: 7470108173926009978}
   - component: {fileID: -6978000489434474320}
+  - component: {fileID: 833753561746244527}
   m_Layer: 0
-  m_Name: BosalHorizontalHand
+  m_Name: Bosal_SecondAttack_Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,23 +252,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7470108173926009978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7832978668110859756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c62ba340de0f6409693ca5b94404fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 1
-  castTime: 1.5
-  distance: 10
-  leftHand: {fileID: 1245165329336836366}
-  rightHand: {fileID: 6648176795879276551}
 --- !u!50 &-6978000489434474320
 Rigidbody2D:
   serializedVersion: 4
@@ -290,3 +273,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &833753561746244527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832978668110859756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6c22ececad15848bc674ffed51e2ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 1
+  castTime: 0.5
+  distance: 5.5
+  leftHand: {fileID: 1245165329336836366}
+  rightHand: {fileID: 6648176795879276551}

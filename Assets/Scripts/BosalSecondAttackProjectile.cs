@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BosalHorizontalHand : MonoBehaviour
+public class BosalSecondAttackProjectile : MonoBehaviour
 {
     [SerializeField] private float delay;
     [SerializeField] private float castTime;
@@ -29,9 +29,18 @@ public class BosalHorizontalHand : MonoBehaviour
 
     private IEnumerator Attack()
     {
-        yield return new WaitForSeconds(delay);
-
         float current = 0;
+        while (current < delay)
+        {
+            current += Time.deltaTime;
+
+            leftHand.transform.position = new Vector2(target.position.x - distance, leftHand.transform.position.y);
+            rightHand.transform.position = new Vector2(target.position.x + distance, rightHand.transform.position.y);
+
+            yield return null;
+        }
+
+        current = 0;
         while (current < castTime)
         {
             current += Time.deltaTime;

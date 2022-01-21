@@ -959,6 +959,8 @@ GameObject:
   - component: {fileID: 1012294166}
   - component: {fileID: 1012294167}
   - component: {fileID: 1012294169}
+  - component: {fileID: 1012294170}
+  - component: {fileID: 1012294171}
   m_Layer: 7
   m_Name: Bosal
   m_TagString: Boss
@@ -1006,7 +1008,7 @@ SpriteRenderer:
   m_SortingLayerID: 496213681
   m_SortingLayer: -2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 030f0acadb17c9f4da110c9a2a128d36, type: 3}
+  m_Sprite: {fileID: -2316136925588435419, guid: f749f70368a22304b824b270208898c0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1025,7 +1027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1012294161}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1062,24 +1064,28 @@ MonoBehaviour:
   patrolRange: 0
   firstAttackDamage: 20
   firstAttackPrepareTime: 0.8
-  firstAttackCooldown: 10
-  firstAttackProjectile: {fileID: 2710296248941561140, guid: d7815fb985965a8499b7e9837662ab20, type: 3}
+  firstAttackCooldown: 0
+  firstAttackProjectiles:
+  - {fileID: 3929226727834537354, guid: d7815fb985965a8499b7e9837662ab20, type: 3}
+  - {fileID: 3929226727834537354, guid: ce4591297e7f42343a0657d5b656c4bd, type: 3}
   firstAttackYOffset: 3
   firstAttackNum: 6
   firstAttackDelay: 0.6
   firstAttackSpawnRange: 5
   secondAttackDamage: 40
   secondAttackPrepareTime: 0
-  secondAttackCooldown: 10
-  secondAttackProjectile: {fileID: 7470108173926009978, guid: df792a9d2d715614d956207590c36317, type: 3}
-  secondAttackYOffset: -2
+  secondAttackCooldown: 0
+  secondAttackProjectile: {fileID: 833753561746244527, guid: df792a9d2d715614d956207590c36317, type: 3}
+  secondAttackYOffset: -1.6
   thirdAttackDamage: 10
   thirdAttackPrepareTime: 0
-  thirdAttackCooldown: 10
-  thirdAttackProjectile: {fileID: 4383050278649703137, guid: 0062e879bcae5454e9081c9f64c04fad, type: 3}
+  thirdAttackCooldown: 0
+  thirdAttackProjectiles:
+  - {fileID: 2430718192950304361, guid: 0062e879bcae5454e9081c9f64c04fad, type: 3}
+  - {fileID: 2430718192950304361, guid: 7b3156e516f20f74eb1cb20911ff97a3, type: 3}
+  - {fileID: 2430718192950304361, guid: 116ee4c12f2891c4a91c01b5d708746c, type: 3}
   thirdAttackYOffset: 3
-  thirdAttackNum: 20
-  thirdAttackDelay: 0.3
+  thirdAttackNum: 10
   thirdAttackSpawnRange: 5
   thirdAttackDuration: 2
 --- !u!114 &1012294166
@@ -1115,7 +1121,19 @@ MonoBehaviour:
         m_CallState: 2
   onDead:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1012294170}
+        m_TargetAssemblyTypeName: DestroySelf, Assembly-CSharp
+        m_MethodName: Destroy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!58 &1012294167
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1129,7 +1147,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.011279404, y: 0}
+  m_Offset: {x: -0.1, y: 0.4}
   serializedVersion: 2
   m_Radius: 0.5560004
 --- !u!114 &1012294168
@@ -1168,6 +1186,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1012294162}
   flashTime: 0.1
+--- !u!114 &1012294170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012294161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6115dea8b6816dd41814f2d5cd319433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &1012294171
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012294161}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3dad75cebfac0cc4ca14446e2a104991, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1213974208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,7 +1471,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1573428676}
-  m_BodyType: 1
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

@@ -11,20 +11,21 @@ public class BosalBT : BehaviorTree
     public override void Init(EnemyAI enemyAI)
     {
         root.AddChild(new IsStop(enemyAI, true));
-        root.AddChild(selector);
+        root.AddChild(new BosalRandomAttack(enemyAI));
+        //root.AddChild(selector);
 
-        selector.AddChild(sequenceFirstAttack);
-        selector.AddChild(sequenceSecondAttack);
-        selector.AddChild(sequenceThirdAttack);
+        //selector.AddChild(sequenceFirstAttack);
+        //selector.AddChild(sequenceSecondAttack);
+        //selector.AddChild(sequenceThirdAttack);
 
-        sequenceFirstAttack.AddChild(new CanAttack(enemyAI, "FirstAttack"));
-        sequenceFirstAttack.AddChild(new BosalFirstAttack(enemyAI));
-
-        sequenceSecondAttack.AddChild(new CanAttack(enemyAI, "SecondAttack"));
-        sequenceSecondAttack.AddChild(new BosalSecondAttack(enemyAI));
-
-        sequenceThirdAttack.AddChild(new CanAttack(enemyAI, "ThirdAttack"));
-        sequenceThirdAttack.AddChild(new BosalThirdAttack(enemyAI));
+        //sequenceFirstAttack.AddChild(new CanAttack(enemyAI, "FirstAttack"));
+        //sequenceFirstAttack.AddChild(new BosalFirstAttack(enemyAI));
+        //
+        //sequenceSecondAttack.AddChild(new CanAttack(enemyAI, "SecondAttack"));
+        //sequenceSecondAttack.AddChild(new BosalSecondAttack(enemyAI));
+        //
+        //sequenceThirdAttack.AddChild(new CanAttack(enemyAI, "ThirdAttack"));
+        //sequenceThirdAttack.AddChild(new BosalThirdAttack(enemyAI));
     }
 
     public override void BTUpdate()
