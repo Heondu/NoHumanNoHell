@@ -125,6 +125,8 @@ GameObject:
   - component: {fileID: 7893934412415118986}
   - component: {fileID: 5141737906368447676}
   - component: {fileID: 8809922854046880195}
+  - component: {fileID: 831780042546699399}
+  - component: {fileID: 3871930876497760685}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -274,7 +276,7 @@ MonoBehaviour:
   dashForceStrong: 15
   dashForceOnAir: 10
   dashTime: 0.2
-  knockbackForce: 0
+  knockbackForce: 3
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -393,9 +395,9 @@ MonoBehaviour:
   onDead:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9015139011594674925, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Restart
+      - m_Target: {fileID: 3871930876497760685}
+        m_TargetAssemblyTypeName: FadeEffect, Assembly-CSharp
+        m_MethodName: Fade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -431,3 +433,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf038defabfc9a4fb9a92c0e498e437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &831780042546699399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723275675227100520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a76a76b8541a274091cddfa83c10ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3871930876497760685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723275675227100520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9261fe0fb03c2d408b9183363b975a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeTime: 2
+  onFadeEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4723275675227100527}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

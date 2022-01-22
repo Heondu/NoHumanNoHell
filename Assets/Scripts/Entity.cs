@@ -26,13 +26,16 @@ public class Entity : MonoBehaviour
     private CapsuleCollider2D capsuleCollider2D;
 
     [Header("Event")]
-    public UnityEvent<Entity, float> onTakeDamage;
-    public UnityEvent<Entity> onDead;
+    public UnityEvent onTakeDamage;
+    public UnityEvent onDead;
 
     public Status Status { get; private set; }
     public AttackType AttackType { get; set; }
     public Vector3 Position => capsuleCollider2D.bounds.center;
     private List<AttackTimer> attackTimers = new List<AttackTimer>();
+
+    private bool isDead;
+    public bool IsDead => isDead;
 
     private void Awake()
     {
@@ -56,10 +59,13 @@ public class Entity : MonoBehaviour
         if (movement != null)
             movement.Knockback((transform.position - instigator.transform.position).normalized);
 
-        onTakeDamage.Invoke(this, damage);
+        onTakeDamage.Invoke();
 
         if (Status.CurrentHP == 0f)
-            onDead.Invoke(this);
+        {
+            isDead = true;
+            onDead.Invoke();
+        }
     }
 
     public float GetAttackDelay()

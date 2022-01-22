@@ -52,10 +52,16 @@ public class EnemyAI : MonoBehaviour
         target = FindObjectOfType<PlayerController>().GetComponent<Entity>();
         behaviorTree.Init(this);
         originPos = transform.position;
+
+        entity.onTakeDamage.AddListener(PlayHitAnim);
+        entity.onDead.AddListener(OnDead);
     }
 
     private void Update()
     {
+        if (entity.IsDead)
+            return;
+
         behaviorTree.BTUpdate();
     }
 
@@ -131,6 +137,21 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator WaitAndPlayAnimCo(string name, float delay)
     {
         yield return new WaitForSeconds(delay);
+        if (entity.IsDead)
+            yield break;
         animator.Play(name);
+    }
+
+    public virtual void OnDead()
+    {
+        GetComponent<Rigidbody2D>().simulated = false;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        animator.Play("Death");
+        Destroy(gameObject, 1);
+    }
+
+    public void PlayHitAnim()
+    {
+        animator.Play("Hit");
     }
 }

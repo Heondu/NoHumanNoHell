@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class CameraController : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class CameraController : MonoBehaviour
 
     private Coroutine shakeCoroutine;
     private Vector3 shakeOffset;
+    private PixelPerfectCamera pixelPerfectCamera;
 
     private bool follow = true;
 
@@ -26,12 +28,13 @@ public class CameraController : MonoBehaviour
     {
         target = FindObjectOfType<PlayerController>().transform;
         mapData = FindObjectOfType<MapData>();
+        pixelPerfectCamera = GetComponent<PixelPerfectCamera>();
     }
 
     private void ClampSetup()
     {
-        float height = Camera.main.orthographicSize;
-        float width = height * Screen.width / Screen.height;
+        float height = (float)pixelPerfectCamera.refResolutionY / pixelPerfectCamera.assetsPPU / 2;
+        float width = (float)pixelPerfectCamera.refResolutionX / pixelPerfectCamera.assetsPPU / 2;
 
         xMin = mapData.GetPosition().x + width;
         xMax = mapData.GetSize().x - width;

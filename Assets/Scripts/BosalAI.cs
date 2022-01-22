@@ -122,4 +122,9 @@ public class BosalAI : EnemyAI
         BosalThirdAttackProjectile clone = Instantiate(spawnObject, new Vector2(x, thirdAttackYOffset), Quaternion.identity);
         clone.Setup((int)thirdAttackDamage, gameObject);
     }
+
+    public override void OnDead()
+    {
+        GetComponent<CircleCollider2D>().enabled = false;
+    }
 }

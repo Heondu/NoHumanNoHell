@@ -1439,8 +1439,30 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 8466763194779837827, guid: ca7a4cc72672cc24bb310b8e409e3e05, type: 3}
+    - target: {fileID: 9015139011594674925, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+      propertyPath: restartScene
+      value: Stage2-1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+--- !u!1 &831391765 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3047214855178897074, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+  m_PrefabInstance: {fileID: 831391764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &831391766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831391765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4447791b6eb5d42aa52ced5f66a91b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 7ca456a5e31f1d54eaf29516f60a128b, type: 3}
 --- !u!1 &965940209
 GameObject:
   m_ObjectHideFlags: 0

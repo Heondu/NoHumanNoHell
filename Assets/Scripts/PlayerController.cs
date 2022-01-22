@@ -30,8 +30,16 @@ public class PlayerController : MonoBehaviour
         entity = GetComponent<Entity>();
     }
 
+    private void Start()
+    {
+        entity.onDead.AddListener(OnDead);
+    }
+
     private void Update()
     {
+        if (GameManager.Instance.IsStop || entity.IsDead)
+            return;
+
         MoveUpdate();
         JumpUpdate();
         AttackUpdate();
@@ -84,16 +92,17 @@ public class PlayerController : MonoBehaviour
     {
         currentComboNode = GetNextComboNode(entity.AttackType);
         if (currentComboNode == null)
-            ResetAttackParameter();
-        else
         {
-            entity.Status.SetValue(StatusType.MeleeAttackDamage, currentComboNode.Damage);
-            ++currentComboCount;
-            entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
-
-            StopCoroutine("Attack");
-            StartCoroutine("Attack");
+            ResetAttackParameter();
+            currentComboNode = GetNextComboNode(entity.AttackType);
         }
+
+        entity.Status.SetValue(StatusType.MeleeAttackDamage, currentComboNode.Damage);
+        ++currentComboCount;
+        entity.SetAttackTimer(entity.AttackType.ToString(), entity.GetAttackDelay());
+
+        StopCoroutine("Attack");
+        StartCoroutine("Attack");
     }
 
     private ComboNode GetNextComboNode(AttackType attackType)
@@ -138,5 +147,19 @@ public class PlayerController : MonoBehaviour
     {
         Projectile clone = Instantiate(entity.ProjectilePrefab, entity.RangedAttackPoint.position, Quaternion.identity).GetComponent<Projectile>();
         clone.Setup(direction, (int)damage, gameObject);
+    }
+
+    public void OnDead()
+    {
+        GetComponent<Rigidbody2D>().simulated = false;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        GetComponent<PlayerAnimationController>().enabled = false;
+        GetComponent<Animator>().SetBool("isMove", false);
+        GetComponent<Animator>().Play("Idle");
+    }
+
+    public void Restart()
+    {
+        GameManager.Instance.Restart();
     }
 }

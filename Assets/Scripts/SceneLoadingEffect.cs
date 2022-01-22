@@ -21,7 +21,10 @@ public class SceneLoadingEffect : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isPlayerEnter) return;
+        if (isPlayerEnter)
+            return;
+        if (IsEnemiesLeft())
+            return;
 
         if (collision.CompareTag("Player"))
         {
@@ -50,5 +53,13 @@ public class SceneLoadingEffect : MonoBehaviour
         {
             player.GetComponent<Movement>().Move(direction * 0.1f);
         }
+    }
+
+    private bool IsEnemiesLeft()
+    {
+        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        if (enemies.Length == 0)
+            return false;
+        return true;
     }
 }

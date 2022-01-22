@@ -896,6 +896,10 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 8466763194779837827, guid: 199fde146fcba1d4e92baefdebf49d1b, type: 3}
+    - target: {fileID: 9015139011594674925, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+      propertyPath: restartScene
+      value: Stage5-1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
 --- !u!1001 &864446552
