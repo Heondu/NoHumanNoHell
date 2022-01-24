@@ -81,8 +81,6 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("FirstAttack", self.firstAttackCooldown);
             self.FirstAttack();
 
             return true;
@@ -100,8 +98,6 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("SecondAttack", self.secondAttackCooldown);
             self.SecondAttack();
 
             return true;
@@ -119,8 +115,6 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("ThirdAttack", self.thirdAttackCooldown);
             self.ThirdAttack();
 
             return true;
@@ -141,18 +135,13 @@ namespace BT
             if (self.IsAttacking)
                 return false;
 
-            int rand = Random.Range(0, 3);
+                int rand = Random.Range(0, 2);
             if (rand == 0)
             {
                 if (self.Entity.CanAttack("FirstAttack"))
                     self.FirstAttack();
             }
             else if (rand == 1)
-            {
-                if (self.Entity.CanAttack("SecondAttack"))
-                    self.SecondAttack();
-            }
-            else if (rand == 2)
             {
                 if (self.Entity.CanAttack("ThirdAttack"))
                     self.ThirdAttack();

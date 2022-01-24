@@ -54,4 +54,10 @@ public class CowAI : EnemyAI
         }
         animator.Play("JumpAttack_After");
     }
+
+    public override void OnDead()
+    {
+        base.OnDead();
+        target.GetComponent<Entity>().SetCanBeDamaged(false);
+    }
 }

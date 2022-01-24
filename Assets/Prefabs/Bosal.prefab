@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 9027858650439817417}
   - component: {fileID: 9027858650439817416}
   - component: {fileID: 7550585256172475972}
+  - component: {fileID: 3261347772509313720}
   m_Layer: 7
   m_Name: Bosal
   m_TagString: Boss
@@ -120,7 +121,7 @@ MonoBehaviour:
   firstAttackSpawnRange: 5
   secondAttackDamage: 40
   secondAttackPrepareTime: 0
-  secondAttackCooldown: 0
+  secondAttackCooldown: 10
   secondAttackProjectile: {fileID: 833753561746244527, guid: df792a9d2d715614d956207590c36317, type: 3}
   secondAttackYOffset: -1.6
   thirdAttackDamage: 10
@@ -315,3 +316,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3261347772509313720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9027858650439817410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a76a76b8541a274091cddfa83c10ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

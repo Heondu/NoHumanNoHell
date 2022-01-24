@@ -126,5 +126,6 @@ public class BosalAI : EnemyAI
     public override void OnDead()
     {
         GetComponent<CircleCollider2D>().enabled = false;
+        target.GetComponent<Entity>().SetCanBeDamaged(false);
     }
 }

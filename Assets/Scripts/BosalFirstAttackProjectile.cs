@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BosalFirstAttackProjectile : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class BosalFirstAttackProjectile : MonoBehaviour
     [SerializeField] private float castTime;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject attackMaker;
+    [SerializeField] private UnityEvent onGrounded = new UnityEvent();
 
     private int damage;
     private GameObject instigator;
@@ -51,6 +53,7 @@ public class BosalFirstAttackProjectile : MonoBehaviour
             yield return null;
         }
 
+        onGrounded.Invoke();
         GetComponent<BoxCollider2D>().enabled = false;
         Destroy(gameObject, 1f);
     }

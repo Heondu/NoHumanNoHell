@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6454025524079728082}
   - component: {fileID: 8410722775441877555}
   - component: {fileID: 3929226727834537354}
+  - component: {fileID: 36649869249647650}
   m_Layer: 0
   m_Name: Bosal_FirstAttack_Projectile_Hand
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5468847983184969105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4746772891059229729}
   m_Father: {fileID: 0}
@@ -130,6 +131,33 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   attackMaker: {fileID: 8182704179802896639}
+  onGrounded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 36649869249647650}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: f031cceab00a95943891bdd78eccae40, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &36649869249647650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468847983184969105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a76a76b8541a274091cddfa83c10ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8182704179802896639
 GameObject:
   m_ObjectHideFlags: 0

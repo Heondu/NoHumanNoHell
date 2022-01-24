@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 6850047730542554853}
   - component: {fileID: -6978000489434474320}
   - component: {fileID: 833753561746244527}
+  - component: {fileID: 2241750648126483621}
   m_Layer: 0
   m_Name: Bosal_SecondAttack_Projectile
   m_TagString: Untagged
@@ -286,7 +287,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delay: 1
-  castTime: 0.5
+  castTime: 1
   distance: 5.5
   leftHand: {fileID: 1245165329336836366}
   rightHand: {fileID: 6648176795879276551}
+  onStartMove:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2241750648126483621}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 218255d8dd9f9ab4aad2b728856446c2, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2241750648126483621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832978668110859756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a76a76b8541a274091cddfa83c10ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BosalSecondAttackProjectile : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class BosalSecondAttackProjectile : MonoBehaviour
 
     [SerializeField] private GameObject leftHand;
     [SerializeField] private GameObject rightHand;
+    [SerializeField] private UnityEvent onStartMove;
 
     public void Setup(int damage, GameObject instigator, Transform target)
     {
@@ -39,6 +41,8 @@ public class BosalSecondAttackProjectile : MonoBehaviour
 
             yield return null;
         }
+
+        onStartMove.Invoke();
 
         current = 0;
         while (current < castTime)

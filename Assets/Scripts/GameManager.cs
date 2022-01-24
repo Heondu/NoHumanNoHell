@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         Vector3 startPoint = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
         Instantiate(player, startPoint, Quaternion.identity);
         Instantiate(canvas);
+        Time.timeScale = 1;
     }
 
     public void Restart()

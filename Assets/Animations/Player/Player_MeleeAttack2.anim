@@ -68,7 +68,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.31578946
-        value: 0.368109
+        value: 0.43576193
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -96,7 +96,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.31578946
-        value: 1.3029318
+        value: 1.4382377
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -324,7 +324,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.31578946
-        value: 0.368109
+        value: 0.43576193
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -352,7 +352,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.31578946
-        value: 1.3029318
+        value: 1.4382377
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -443,7 +443,7 @@ AnimationClip:
   - time: 0.31578946
     functionName: PlaySFX
     data: 
-    objectReferenceParameter: {fileID: 8300000, guid: c78ffaca5be286848b83c0a4bb15a5fc, type: 3}
+    objectReferenceParameter: {fileID: 8300000, guid: b5996bdd47bf05042b1bdd3e48b0f338, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
