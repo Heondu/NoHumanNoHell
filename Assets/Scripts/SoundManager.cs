@@ -66,8 +66,7 @@ public class SoundManager : MonoBehaviour
 
     private void SoundAllMute(Scene scene, LoadSceneMode loadSceneMode)
     {
-        foreach (AudioSource audioSource in Instance.soundBarSFX)
-            audioSource.Stop();
+        SoundAllMute();
     }
 
     public static void PlayBGM(AudioClip clip)
@@ -99,5 +98,11 @@ public class SoundManager : MonoBehaviour
     public float GetBGMVolume()
     {
         return bgmVolume;
+    }
+
+    public static void SoundAllMute()
+    {
+        foreach (AudioSource audioSource in Instance.soundBarSFX)
+            audioSource.Stop();
     }
 }

@@ -15,13 +15,7 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("DefaultAttack", self.defaultAttackCooldown);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.defaultAttackDamage);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.defaultAttackStopTime);
-            self.GetComponent<Animator>().Play("DefaultAttack_Prepare");
-            self.WaitAndPlayAnim("DefaultAttack", self.defaultAttackPrepareTime);
-            
+            self.DefaultAttack();
             return true;
         }
     }
@@ -37,13 +31,7 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("ChargeAttack", self.chargeAttackCooldown);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.chargeAttackDamage);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.chargeAttackStopTime);
-            self.GetComponent<Animator>().Play("ChargeAttack_Prepare");
-            self.WaitAndPlayAnim("ChargeAttack", self.chargeAttackPrepareTime);
-
+            self.ChargeAttack();
             return true;
         }
     }
@@ -59,13 +47,7 @@ namespace BT
 
         public override bool Invoke()
         {
-            self.IsAttacking = true;
-            self.Entity.SetAttackTimer("JumpAttack", self.jumpAttackCooldown);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDamage, self.jumpAttackDamage);
-            self.Entity.Status.SetValue(StatusType.MeleeAttackDelay, self.jumpAttackStopTime);
-            self.GetComponent<Animator>().Play("JumpAttack_Prepare");
-            self.WaitAndPlayAnim("JumpAttack", self.jumpAttackPrepareTime);
-
+            self.JumpAttack();
             return true;
         }
     }
@@ -135,13 +117,53 @@ namespace BT
             if (self.IsAttacking)
                 return false;
 
-                int rand = Random.Range(0, 2);
+                int rand = Random.Range(0, 3);
             if (rand == 0)
             {
                 if (self.Entity.CanAttack("FirstAttack"))
                     self.FirstAttack();
             }
             else if (rand == 1)
+            {
+                if (self.Entity.CanAttack("SecondAttack"))
+                    self.SecondAttack();
+            }
+            else if (rand == 2)
+            {
+                if (self.Entity.CanAttack("ThirdAttack"))
+                    self.ThirdAttack();
+            }
+
+            return true;
+        }
+    }
+
+    public class AsuraRandomAttack : BTNode
+    {
+        private AsuraAI self;
+
+        public AsuraRandomAttack(EnemyAI self)
+        {
+            this.self = (AsuraAI)self;
+        }
+
+        public override bool Invoke()
+        {
+            if (self.IsAttacking)
+                return false;
+
+            int rand = Random.Range(0, 3);
+            if (rand == 0)
+            {
+                if (self.Entity.CanAttack("FirstAttack"))
+                    self.FirstAttack();
+            }
+            else if (rand == 1)
+            {
+                if (self.Entity.CanAttack("ThirdAttack"))
+                    self.SecondAttack();
+            }
+            else if (rand == 2)
             {
                 if (self.Entity.CanAttack("ThirdAttack"))
                     self.ThirdAttack();

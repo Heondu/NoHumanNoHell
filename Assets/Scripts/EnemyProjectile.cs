@@ -58,22 +58,10 @@ public class EnemyProjectile : Projectile
         if (targetEntity != null)
         {
             animator.Play("Attack");
-            targetEntity.TakeDamage(gameObject, damage);
+            targetEntity.TakeDamage(damage);
+            Movement movement = collision.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback((transform.position - transform.position).normalized);
         }
-    }
-
-    private void OnBecameVisible()
-    {
-        CancelInvoke();
-    }
-
-    private void OnBecameInvisible()
-    {
-        Invoke("Destroy", 3f);
-    }
-
-    private void Destroy()
-    {
-        Destroy(gameObject);
     }
 }

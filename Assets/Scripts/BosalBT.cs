@@ -10,13 +10,14 @@ public class BosalBT : BehaviorTree
     public override void Init(EnemyAI enemyAI)
     {
         root.AddChild(new IsStop(enemyAI, true));
-        root.AddChild(selector);
+        root.AddChild(sequenceRandomAttack);
+        //root.AddChild(selector);
 
-        selector.AddChild(sequenceSecondAttack);
-        selector.AddChild(sequenceRandomAttack);
+        //selector.AddChild(sequenceSecondAttack);
+        //selector.AddChild(sequenceRandomAttack);
 
-        sequenceSecondAttack.AddChild(new CanAttack(enemyAI, "SecondAttack"));
-        sequenceSecondAttack.AddChild(new BosalSecondAttack(enemyAI));
+        //sequenceSecondAttack.AddChild(new CanAttack(enemyAI, "SecondAttack"));
+        //sequenceSecondAttack.AddChild(new BosalSecondAttack(enemyAI));
 
         sequenceRandomAttack.AddChild(new BosalRandomAttack(enemyAI));
     }

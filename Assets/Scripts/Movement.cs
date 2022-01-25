@@ -24,6 +24,7 @@ public class Movement : MonoBehaviour
 
     private new Rigidbody2D rigidbody2D;
     private CapsuleCollider2D capsuleCollider2D;
+    private Entity entity;
     private bool isGrounded = false;
     private bool isSlope = false;
     private bool isDash = false;
@@ -41,6 +42,7 @@ public class Movement : MonoBehaviour
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        entity = GetComponent<Entity>();
     }
 
     private void Update()
@@ -108,6 +110,9 @@ public class Movement : MonoBehaviour
 
     public void Knockback(Vector3 direction)
     {
+        if (!entity.CanBeDamaged)
+            return;
+
         rigidbody2D.velocity = Vector2.zero;
         rigidbody2D.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }

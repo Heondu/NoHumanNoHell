@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerProjectile : Projectile
 {
+    [SerializeField] protected LayerMask groundLayer;
     [SerializeField] private float maxDistance;
 
     private bool isReturn = false;
@@ -51,7 +52,7 @@ public class PlayerProjectile : Projectile
 
     private bool IsHitTheWall()
     {
-        return Physics2D.Raycast(transform.position, direction, 0.1f, groundMask);
+        return Physics2D.Raycast(transform.position, direction, 0.1f, groundLayer);
     }
 
     private void ReturnCheckAndSet()
@@ -84,7 +85,10 @@ public class PlayerProjectile : Projectile
         Entity targetEntity = collision.GetComponent<Entity>();
         if (targetEntity != null)
         {
-            targetEntity.TakeDamage(instigator, damage);
+            targetEntity.TakeDamage(damage);
+            Movement movement = collision.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback((transform.position - transform.position).normalized);
         }
     }
 }

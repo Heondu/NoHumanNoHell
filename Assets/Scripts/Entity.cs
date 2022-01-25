@@ -36,6 +36,11 @@ public class Entity : MonoBehaviour
 
     private bool isDead;
     public bool IsDead => isDead;
+    public bool CanBeDamaged
+    {
+        get { return canBeDamaged; }
+        set { canBeDamaged = value; }
+    }
 
     private void Awake()
     {
@@ -50,14 +55,11 @@ public class Entity : MonoBehaviour
         AttackType = defaultAttackType;
     }
 
-    public void TakeDamage(GameObject instigator, float damage)
+    public void TakeDamage(float damage)
     {
         if (!canBeDamaged) return;
 
         Status.CurrentHP -= damage;
-
-        if (movement != null)
-            movement.Knockback((transform.position - instigator.transform.position).normalized);
 
         onTakeDamage.Invoke();
 
@@ -82,11 +84,6 @@ public class Entity : MonoBehaviour
             case AttackType.RangedAttack: return Status.GetValue(StatusType.RangedAttackDelay);
             default: return 0f;
         }
-    }
-
-    public void SetCanBeDamaged(bool value)
-    {
-        canBeDamaged = value;
     }
 
     public bool CanAttack(string key)

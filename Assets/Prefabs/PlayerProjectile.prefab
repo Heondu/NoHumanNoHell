@@ -114,7 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae8ef62a7bd74cf4eb16608c02eb165b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundMask:
+  onBecameInvisible:
+    m_PersistentCalls:
+      m_Calls: []
+  groundLayer:
     serializedVersion: 2
     m_Bits: 256
   maxDistance: 10

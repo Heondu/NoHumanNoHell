@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 496213681
   m_SortingLayer: -2
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2316136925588435419, guid: f749f70368a22304b824b270208898c0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -109,6 +109,9 @@ MonoBehaviour:
   MovePosition: {x: 0, y: 0, z: 0}
   patrolTime: 0
   patrolRange: 0
+  onAttackEnd:
+    m_PersistentCalls:
+      m_Calls: []
   firstAttackDamage: 20
   firstAttackPrepareTime: 0.8
   firstAttackCooldown: 0
@@ -206,18 +209,6 @@ MonoBehaviour:
       - m_Target: {fileID: 7550585256172475972}
         m_TargetAssemblyTypeName: FadeEffect, Assembly-CSharp
         m_MethodName: Fade
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 9027858650439817414}
-        m_TargetAssemblyTypeName: EnemyAI, Assembly-CSharp
-        m_MethodName: OnDead
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

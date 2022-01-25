@@ -62,6 +62,8 @@ public class BosalAI : EnemyAI
             yield return new WaitForSeconds(firstAttackDelay);
         }
 
+        onAttackEnd.Invoke();
+
         yield return new WaitForSeconds(2);
 
         IsAttacking = false;
@@ -85,7 +87,7 @@ public class BosalAI : EnemyAI
     private IEnumerator SecondAttackCo()
     {
         BosalSecondAttackProjectile clone = Instantiate(secondAttackProjectile, new Vector2(Target.Position.x, secondAttackYOffset), Quaternion.identity);
-        clone.Setup((int)secondAttackDamage, gameObject, Target.transform);
+        clone.Setup((int)secondAttackDamage, gameObject);
 
         yield return new WaitForSeconds(3);
 
@@ -109,6 +111,7 @@ public class BosalAI : EnemyAI
             SpawnFood();
             yield return new WaitForSeconds(delay);
         }
+        onAttackEnd.Invoke();
 
         yield return new WaitForSeconds(2);
 
@@ -125,7 +128,7 @@ public class BosalAI : EnemyAI
 
     public override void OnDead()
     {
-        GetComponent<CircleCollider2D>().enabled = false;
-        target.GetComponent<Entity>().SetCanBeDamaged(false);
+        entity.CanBeDamaged = false;
+        target.GetComponent<Entity>().CanBeDamaged = false;
     }
 }

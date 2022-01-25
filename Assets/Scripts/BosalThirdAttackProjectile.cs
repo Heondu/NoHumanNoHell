@@ -45,7 +45,10 @@ public class BosalThirdAttackProjectile : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Entity>().TakeDamage(instigator, damage);
+            collision.GetComponent<Entity>().TakeDamage(damage);
+            Movement movement = collision.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback((transform.position - transform.position).normalized);
             GetComponent<CircleCollider2D>().enabled = false;
         }
     }

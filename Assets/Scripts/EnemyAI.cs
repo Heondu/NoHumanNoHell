@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum EnemyState
 {
@@ -27,6 +28,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float patrolTime;
     [SerializeField] private float patrolRange;
 
+    public UnityEvent onAttackEnd = new UnityEvent();
+
     public Entity Entity => entity;
     public Entity Target => target;
     public bool IsStop => isStop;
@@ -53,7 +56,6 @@ public class EnemyAI : MonoBehaviour
         behaviorTree.Init(this);
         originPos = transform.position;
 
-        entity.onTakeDamage.AddListener(PlayHitAnim);
         entity.onDead.AddListener(OnDead);
     }
 
@@ -110,9 +112,10 @@ public class EnemyAI : MonoBehaviour
     }
 
     private void AttackEnd()
-    {;
+    {
         IsAttacking = false;
         WaitAttackDelay(entity.Status.GetValue(StatusType.MeleeAttackDelay));
+        onAttackEnd.Invoke();
     }
 
     protected void WaitAttackDelay(float time)

@@ -12,8 +12,12 @@ public class JumpAttackBox : AttackBox
         if (IsWallBetweenTarget(collision.transform))
             return;
 
-        target.TakeDamage(owner.gameObject, damage);
-        Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;
-        target.GetComponent<Movement>().Knockback(direction * 5);
+        target.TakeDamage(damage);
+        Movement movement = target.GetComponent<Movement>();
+        if (movement != null)
+        {
+            Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;
+            movement.Knockback(direction * 5);
+        }
     }
 }

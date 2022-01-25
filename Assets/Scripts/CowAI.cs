@@ -24,6 +24,36 @@ public class CowAI : EnemyAI
     public float jumpAttackForce;
     [SerializeField] private AnimationCurve jumpAttackCurve;
 
+    public void DefaultAttack()
+    {
+        IsAttacking = true;
+        entity.SetAttackTimer("DefaultAttack", defaultAttackCooldown);
+        entity.Status.SetValue(StatusType.MeleeAttackDamage, defaultAttackDamage);
+        entity.Status.SetValue(StatusType.MeleeAttackDelay, defaultAttackStopTime);
+        animator.Play("DefaultAttack_Prepare");
+        WaitAndPlayAnim("DefaultAttack", defaultAttackPrepareTime);
+    }
+
+    public void ChargeAttack()
+    {
+        IsAttacking = true;
+        entity.SetAttackTimer("ChargeAttack", chargeAttackCooldown);
+        entity.Status.SetValue(StatusType.MeleeAttackDamage, chargeAttackDamage);
+        entity.Status.SetValue(StatusType.MeleeAttackDelay, chargeAttackStopTime);
+        animator.Play("ChargeAttack_Prepare");
+        WaitAndPlayAnim("ChargeAttack", chargeAttackPrepareTime);
+    }
+
+    public void JumpAttack()
+    {
+        IsAttacking = true;
+        entity.SetAttackTimer("JumpAttack", jumpAttackCooldown);
+        entity.Status.SetValue(StatusType.MeleeAttackDamage, jumpAttackDamage);
+        entity.Status.SetValue(StatusType.MeleeAttackDelay, jumpAttackStopTime);
+        animator.Play("JumpAttack_Prepare");
+        WaitAndPlayAnim("JumpAttack", jumpAttackPrepareTime);
+    }
+
     public void DashToTarget()
     {
         LookAtTarget();
@@ -58,6 +88,6 @@ public class CowAI : EnemyAI
     public override void OnDead()
     {
         base.OnDead();
-        target.GetComponent<Entity>().SetCanBeDamaged(false);
+        target.GetComponent<Entity>().CanBeDamaged = false;
     }
 }

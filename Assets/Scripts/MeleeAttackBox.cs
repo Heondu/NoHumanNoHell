@@ -10,7 +10,7 @@ public class MeleeAttackBox : AttackBox
         if (IsWallBetweenTarget(collision.transform))
             return;
 
-        target.TakeDamage(owner.gameObject, owner.Status.GetValue(StatusType.MeleeAttackDamage));
+        target.TakeDamage(owner.Status.GetValue(StatusType.MeleeAttackDamage));
         Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;
         if (owner.AttackType == AttackType.MeleeAttack)
         {

@@ -27,4 +27,19 @@ public class Projectile : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
+
+    private void OnBecameVisible()
+    {
+        CancelInvoke();
+    }
+
+    private void OnBecameInvisible()
+    {
+        Invoke("Destroy", 3f);
+    }
+
+    protected void Destroy()
+    {
+        Destroy(gameObject);
+    }
 }

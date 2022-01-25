@@ -11,20 +11,20 @@ public class BosalSecondAttackProjectile : MonoBehaviour
 
     private int damage;
     private GameObject instigator;
-    private Transform target;
+    private new Transform camera;
 
     [SerializeField] private GameObject leftHand;
     [SerializeField] private GameObject rightHand;
     [SerializeField] private UnityEvent onStartMove;
 
-    public void Setup(int damage, GameObject instigator, Transform target)
+    public void Setup(int damage, GameObject instigator)
     {
         this.damage = damage;
         this.instigator = instigator;
-        this.target = target;
+        camera = Camera.main.transform;
 
-        leftHand.transform.position = new Vector2(transform.position.x - distance, transform.position.y);
-        rightHand.transform.position = new Vector2(transform.position.x + distance, transform.position.y);
+        leftHand.transform.position = new Vector2(camera.position.x - distance, transform.position.y);
+        rightHand.transform.position = new Vector2(camera.position.x + distance, transform.position.y);
 
         StartCoroutine("Attack");
     }
@@ -36,8 +36,8 @@ public class BosalSecondAttackProjectile : MonoBehaviour
         {
             current += Time.deltaTime;
 
-            leftHand.transform.position = new Vector2(target.position.x - distance, leftHand.transform.position.y);
-            rightHand.transform.position = new Vector2(target.position.x + distance, rightHand.transform.position.y);
+            leftHand.transform.position = new Vector2(camera.position.x - distance, leftHand.transform.position.y);
+            rightHand.transform.position = new Vector2(camera.position.x + distance, rightHand.transform.position.y);
 
             yield return null;
         }
@@ -49,8 +49,8 @@ public class BosalSecondAttackProjectile : MonoBehaviour
         {
             current += Time.deltaTime;
 
-            float leftX = Mathf.Lerp(target.position.x - distance, target.position.x, current / castTime);
-            float rightX = Mathf.Lerp(target.position.x + distance, target.position.x, current / castTime);
+            float leftX = Mathf.Lerp(camera.position.x - distance, camera.position.x, current / castTime);
+            float rightX = Mathf.Lerp(camera.position.x + distance, camera.position.x, current / castTime);
             leftHand.transform.position = new Vector2(leftX, leftHand.transform.position.y);
             rightHand.transform.position = new Vector2(rightX, rightHand.transform.position.y);
 
@@ -60,6 +60,8 @@ public class BosalSecondAttackProjectile : MonoBehaviour
         leftHand.GetComponent<BoxCollider2D>().enabled = false;
         rightHand.GetComponent<BoxCollider2D>().enabled = false;
 
+        instigator.GetComponent<EnemyAI>().onAttackEnd.Invoke();
+
         Destroy(leftHand, 1f);
         Destroy(rightHand, 1f);
     }
@@ -68,7 +70,10 @@ public class BosalSecondAttackProjectile : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Entity>().TakeDamage(instigator, damage / 2);
+            collision.GetComponent<Entity>().TakeDamage(damage / 2);
+            Movement movement = collision.GetComponent<Movement>();
+            if (movement != null)
+                movement.Knockback((transform.position - transform.position).normalized);
             leftHand.GetComponent<BoxCollider2D>().enabled = false;
             rightHand.GetComponent<BoxCollider2D>().enabled = false;
         }
