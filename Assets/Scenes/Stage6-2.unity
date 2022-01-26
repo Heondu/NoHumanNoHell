@@ -242,6 +242,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &512097925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3047214855178897074, guid: 167fceb0f8d48b34ab2e571701800c80, type: 3}
+  m_PrefabInstance: {fileID: 831391764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &512097926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512097925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4447791b6eb5d42aa52ced5f66a91b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 4bb8812088284d84f816c29598d48015, type: 3}
 --- !u!1 &532966562
 GameObject:
   m_ObjectHideFlags: 0
@@ -2088,7 +2106,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3483901836095405096, guid: fdc092cb811b18d4a8228a97d4f00051, type: 3}
       propertyPath: sceneName
-      value: Ending1
+      value: Ending3
       objectReference: {fileID: 0}
     - target: {fileID: 3483901836095405100, guid: fdc092cb811b18d4a8228a97d4f00051, type: 3}
       propertyPath: m_Name

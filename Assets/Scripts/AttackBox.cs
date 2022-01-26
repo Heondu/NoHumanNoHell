@@ -23,4 +23,9 @@ public class AttackBox : MonoBehaviour
     {
         return owner;
     }
+
+    public void SetOwner(Entity owner)
+    {
+        this.owner = owner;
+    }
 }

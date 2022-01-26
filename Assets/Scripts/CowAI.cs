@@ -4,25 +4,27 @@ using UnityEngine;
 public class CowAI : EnemyAI
 {
     [Header("Default Attack")]
-    public float defaultAttackDamage;
+    public int defaultAttackDamage;
     public float defaultAttackRange;
     public float defaultAttackPrepareTime;
     public float defaultAttackStopTime;
     public float defaultAttackCooldown;
     [Header("Charge Attack")]
-    public float chargeAttackDamage;
+    public int chargeAttackDamage;
     public float chargeAttackRange;
     public float chargeAttackPrepareTime;
     public float chargeAttackStopTime;
     public float chargeAttackCooldown;
     [Header("Jump Attack")]
-    public float jumpAttackDamage;
+    public int jumpAttackDamage;
     public float jumpAttackRange;
     public float jumpAttackPrepareTime;
     public float jumpAttackStopTime;
     public float jumpAttackCooldown;
     public float jumpAttackForce;
     [SerializeField] private AnimationCurve jumpAttackCurve;
+    public int smokeAttackDamage;
+    [SerializeField] private SmokeAttackBox smoke;
 
     public void DefaultAttack()
     {
@@ -73,6 +75,7 @@ public class CowAI : EnemyAI
 
         Vector3 start = transform.position;
         Vector3 end = target.transform.position;
+        end.y = start.y;
         float percent = 0;
         while (percent < 0.99f)
         {
@@ -83,6 +86,7 @@ public class CowAI : EnemyAI
             yield return null;
         }
         animator.Play("JumpAttack_After");
+        Instantiate(smoke, transform.position, Quaternion.identity).Setup(smokeAttackDamage, entity);
     }
 
     public override void OnDead()

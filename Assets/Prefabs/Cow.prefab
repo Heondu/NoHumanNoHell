@@ -455,6 +455,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  smokeAttackDamage: 20
+  smoke: {fileID: -8520281584036349327, guid: fc574a88503d11c4ea8934b215ab29be, type: 3}
 --- !u!114 &5612413248246835037
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -152,18 +152,18 @@ namespace BT
             if (self.IsAttacking)
                 return false;
 
-            int rand = Random.Range(0, 3);
-            if (rand == 0)
+            int rand = Random.Range(0, 100);
+            if (rand < 20)
             {
                 if (self.Entity.CanAttack("FirstAttack"))
                     self.FirstAttack();
             }
-            else if (rand == 1)
+            else if (rand < 60)
             {
-                if (self.Entity.CanAttack("ThirdAttack"))
+                if (self.Entity.CanAttack("SecondAttack"))
                     self.SecondAttack();
             }
-            else if (rand == 2)
+            else if (rand < 100)
             {
                 if (self.Entity.CanAttack("ThirdAttack"))
                     self.ThirdAttack();

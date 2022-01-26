@@ -7,8 +7,8 @@ public class MeleeAttackBox : AttackBox
         Entity target = collision.GetComponent<Entity>();
         if (!target || target.CompareTag(owner.tag))
             return;
-        if (IsWallBetweenTarget(collision.transform))
-            return;
+        //if (IsWallBetweenTarget(collision.transform))
+        //    return;
 
         target.TakeDamage(owner.Status.GetValue(StatusType.MeleeAttackDamage));
         Vector3 direction = new Vector3(owner.transform.localScale.x, 0, 0).normalized;

@@ -203,10 +203,14 @@ MonoBehaviour:
   firstAttackRowNum: 3
   firstAttackDelay: 1.2
   firstAttackProjectile: {fileID: 5560191905743433475, guid: 46a4e767fec876f4cb68d7f9a611f8d8, type: 3}
+  firstAttackClips:
+  - {fileID: 8300000, guid: cbe31ac48c255284993f7caca9ba4722, type: 3}
+  - {fileID: 8300000, guid: 69814599f911a704da2d3f0529ac7278, type: 3}
+  - {fileID: 8300000, guid: 45ba9613892b9f745a9d7ef112b05b9c, type: 3}
   firstAttackYOffset: 2.5
   firstAttackSpawnRangeX: 3
   firstAttackXOffset: 7
-  firstAttackSpawnRangeY: 2
+  firstAttackSpawnRangeY: 1.5
   bosses:
   - {fileID: 5393398589500017412, guid: 37955aa2d430da24fb51f1aad4fd4df1, type: 3}
   - {fileID: 9027858650439817414, guid: 0e643a08dfce5234aa5aa737e33079cc, type: 3}
@@ -217,6 +221,7 @@ MonoBehaviour:
   thirdAttackCooldown: 3
   thirdAttackOffset: {x: 6.5, y: -1.5}
   thirdAttackProjectile: {fileID: 4358920590847628721, guid: 0235b09f4b3bf454798a4621e8f3bd94, type: 3}
+  thirdAttackClip: {fileID: 8300000, guid: b285d4236c8f39546b95018dacb6a88d, type: 3}
 --- !u!114 &3702588386724597352
 MonoBehaviour:
   m_ObjectHideFlags: 0

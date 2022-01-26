@@ -1462,7 +1462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4447791b6eb5d42aa52ced5f66a91b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmClip: {fileID: 8300000, guid: 7ca456a5e31f1d54eaf29516f60a128b, type: 3}
+  bgmClip: {fileID: 8300000, guid: c3457b677b169da49bcd29d46a06e185, type: 3}
 --- !u!1 &965940209
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class AsuraAI : EnemyAI
     public int firstAttackRowNum;
     public float firstAttackDelay;
     public AsuraFirstAttackProjectile firstAttackProjectile;
+    public AudioClip[] firstAttackClips;
     [Header("Column")]
     public float firstAttackYOffset;
     public float firstAttackSpawnRangeX;
@@ -27,6 +28,7 @@ public class AsuraAI : EnemyAI
     public float thirdAttackCooldown;
     public Vector2 thirdAttackOffset;
     public AsuraThirdAttackProjectile thirdAttackProjectile;
+    public AudioClip thirdAttackClip;
 
     private EnemyAI spawnedEnemy;
 
@@ -68,7 +70,7 @@ public class AsuraAI : EnemyAI
             else
             {
                 rowCount++;
-                float y = Random.Range(target.Position.y, target.Position.y + firstAttackSpawnRangeY);
+                float y = transform.position.y + 0.5f + Random.Range(0, firstAttackSpawnRangeY);
                 if (Random.Range(0, 2) == 0)
                 {
                     Projectile clone = Instantiate(firstAttackProjectile, new Vector2(-firstAttackXOffset, y), Quaternion.Euler(new Vector3(0, 0, 90)));
@@ -80,6 +82,8 @@ public class AsuraAI : EnemyAI
                     clone.Setup(Vector2.left, firstAttackDamage, gameObject);
                 }
             }
+            SoundManager.PlaySFX(firstAttackClips[Random.Range(0, firstAttackClips.Length)]);
+
             yield return new WaitForSeconds(firstAttackDelay);
         }
 
@@ -128,6 +132,7 @@ public class AsuraAI : EnemyAI
 
         yield return new WaitForSeconds(thirdAttackPrepareTime);
 
+        SoundManager.PlaySFX(thirdAttackClip);
         clone.Setup(Vector2.left, thirdAttackDamage, gameObject);
         clone.GetComponent<CircleCollider2D>().enabled = true;
         clone.GetComponent<Animator>().enabled = true;
